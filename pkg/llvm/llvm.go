@@ -2903,6 +2903,13 @@ func (g *LLVMGenerator) generateExpression(buf *bytes.Buffer, expr ast.Expressio
 			if err != nil {
 				return "", "", err
 			}
+			if strings.HasPrefix(aType, "%struct.") && strings.HasSuffix(aType, "*") && idx < len(pTypes) && !strings.HasSuffix(pTypes[idx], "*") {
+				loadedVal := g.freshReg()
+				pureType := strings.TrimSuffix(aType, "*")
+				buf.WriteString(fmt.Sprintf("    %s = load %s, %s* %s\n", loadedVal, pureType, pureType, aReg))
+				aReg = loadedVal
+				aType = pureType
+			}
 			if idx < len(pTypes) && pTypes[idx] == "i8*" && aType != "i8*" {
 				cStr := g.freshReg()
 				buf.WriteString(fmt.Sprintf("    %s = call i8* @char_to_str(i64 %s)\n", cStr, aReg))

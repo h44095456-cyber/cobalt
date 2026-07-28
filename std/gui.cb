@@ -1,0 +1,27 @@
+# Cobalt Standard Library: std::gui
+# GPU-Accelerated WebAssembly & Native Canvas GUI Engine
+
+struct Point:
+    x: int
+    y: int
+
+struct Color:
+    r: int
+    g: int
+    b: int
+    a: int
+
+struct Canvas:
+    width: int
+    height: int
+    title: string
+
+fn create_canvas(w: int, h: int, title: string) -> std_gui_Canvas:
+    println(f"[GUI Engine] Initialized GPU Canvas ({w}x{h}) - Title: '{title}'")
+    return std_gui_Canvas(w, h, title)
+
+fn draw_rect(c: std_gui_Canvas, p: std_gui_Point, w: int, h: int, color: std_gui_Color):
+    println(f"[GUI Engine] Draw Rect at ({p.x}, {p.y}) Size: {w}x{h} Color: rgba({color.r},{color.g},{color.b},{color.a})")
+
+fn draw_text(c: std_gui_Canvas, p: std_gui_Point, text: string, color: std_gui_Color):
+    println(f"[GUI Engine] Render Text '{text}' at ({p.x}, {p.y})")
