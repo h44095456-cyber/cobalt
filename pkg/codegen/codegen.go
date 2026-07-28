@@ -238,10 +238,15 @@ func (cg *CodeGenerator) Generate(program *ast.Program) (string, error) {
 
 	// Option Runtime Type
 	cg.buf.WriteString("struct Option {\n")
-	cg.buf.WriteString("    bool is_some;\n")
+	cg.buf.WriteString("    bool is_some_flag;\n")
 	cg.buf.WriteString("    long long val;\n")
-	cg.buf.WriteString("    Option operator()() const { return Option{ false, 0 }; }\n")
+	cg.buf.WriteString("    bool is_some() const { return is_some_flag; }\n")
+	cg.buf.WriteString("    bool is_none() const { return !is_some_flag; }\n")
+	cg.buf.WriteString("    long long unwrap() const { return val; }\n")
 	cg.buf.WriteString("};\n\n")
+	cg.buf.WriteString("inline bool s1_is_some(const Option& o) { return o.is_some(); }\n")
+	cg.buf.WriteString("inline bool s2_is_none(const Option& o) { return o.is_none(); }\n")
+	cg.buf.WriteString("inline long long s1_unwrap(const Option& o) { return o.unwrap(); }\n")
 	cg.buf.WriteString("inline Option Some(long long v) { return Option{ true, v }; }\n")
 	cg.buf.WriteString("inline const Option None = Option{ false, 0 };\n\n")
 
