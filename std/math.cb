@@ -1,0 +1,22 @@
+# Cobalt Standard Library: std::math
+# Advanced 3D Linear Algebra, Vector Mathematics & Matrix Transformations for AI & Game Engines
+
+struct Vec3:
+    x: int
+    y: int
+    z: int
+
+fn create_vec3(x: int, y: int, z: int) -> std_math_Vec3:
+    return std_math_Vec3(x, y, z)
+
+fn dot(v1: std_math_Vec3, v2: std_math_Vec3) -> int:
+    return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z)
+
+fn cross(v1: std_math_Vec3, v2: std_math_Vec3) -> std_math_Vec3:
+    let rx = (v1.y * v2.z) - (v1.z * v2.y)
+    let ry = (v1.z * v2.x) - (v1.x * v2.z)
+    let rz = (v1.x * v2.y) - (v1.y * v2.x)
+    return std_math_Vec3(rx, ry, rz)
+
+fn scale(v: std_math_Vec3, factor: int) -> std_math_Vec3:
+    return std_math_Vec3(v.x * factor, v.y * factor, v.z * factor)

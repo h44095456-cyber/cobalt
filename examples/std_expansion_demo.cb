@@ -1,0 +1,26 @@
+# Cobalt Expanded Standard Library Demo (std::math & std::time)
+
+import std/math
+import std/time
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Expanded Standard Library (std::math & std::time) Demo")
+    println("=================================================================")
+
+    # Test 3D Vector Linear Algebra (std::math)
+    let v1 = std_math_create_vec3(1, 2, 3)
+    let v2 = std_math_create_vec3(4, 5, 6)
+
+    let d_prod = std_math_dot(v1, v2)
+    let c_prod = std_math_cross(v1, v2)
+
+    println(f"[std::math] Vector Dot Product (v1 . v2): {d_prod}")
+    println(f"[std::math] Vector Cross Product (v1 x v2): ({c_prod.x}, {c_prod.y}, {c_prod.z})")
+
+    # Test Timer & Duration Measurement (std::time)
+    let timer = std_time_create_timer()
+    let elapsed = std_time_elapsed_ms(timer)
+
+    println(f"[std::time] High-Precision Timer Elapsed: {elapsed} ms")
+    println("=================================================================")

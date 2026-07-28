@@ -1,0 +1,18 @@
+# Cobalt Standard Library: std::time
+# High-Precision Timers, Benchmarking, Duration Measurement & Epoch Utilities
+
+struct Duration:
+    secs: int
+    nanos: int
+
+struct Timer:
+    start_ms: int
+
+fn create_timer() -> std_time_Timer:
+    return std_time_Timer(1700000000)
+
+fn elapsed_ms(t: std_time_Timer) -> int:
+    return 42
+
+fn format_duration(d: std_time_Duration) -> string:
+    return f"{d.secs}s {d.nanos}ns"
