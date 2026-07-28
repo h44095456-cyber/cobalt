@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐍 Cobalt 2D Interactive GUI Snake Game</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(20, 24, 33, 0.95);
+            --primary: #2ecc71;
+            --accent: #e74c3c;
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #2ecc71 0%, #3498db 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+        }
+
+        .header p {
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+
+        .game-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-bar {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .stat-item span {
+            color: var(--primary);
+        }
+
+        canvas {
+            border-radius: 12px;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+            border: 2px solid rgba(46, 204, 113, 0.3);
+            background-color: #141821;
+        }
+
+        .controls-hint {
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--text-dim);
+            display: flex;
+            gap: 12px;
+        }
+
+        .key-badge {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .btn-restart {
+            margin-top: 16px;
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-restart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(46, 204, 113, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🐍 Cobalt 2D Interactive GUI Snake Game</h1>
+        <p>Powered by Cobalt WASM & Canvas Engine</p>
+    </div>
+
+    <div class="game-card">
+        <div class="stats-bar">
+            <div class="stat-item">Score: <span id="score">0</span></div>
+            <div class="stat-item">High Score: <span id="high-score">0</span></div>
+            <div class="stat-item">FPS: <span id="fps">15</span></div>
+        </div>
+
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+        <div class="controls-hint">
+            <div>Controls: <span class="key-badge">W</span> <span class="key-badge">A</span> <span class="key-badge">S</span> <span class="key-badge">D</span> or <span class="key-badge">⬆️</span> <span class="key-badge">⬅️</span> <span class="key-badge">⬇️</span> <span class="key-badge">➡️</span> Arrow Keys</div>
+        </div>
+
+        <button class="btn-restart" onclick="resetGame()">Restart Game</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        const highScoreEl = document.getElementById('high-score');
+
+        const gridSize = 20;
+        const tileCountX = canvas.width / gridSize; // 40 tiles
+        const tileCountY = canvas.height / gridSize; // 30 tiles
+
+        let snake = [
+            { x: 10, y: 15 },
+            { x: 9, y: 15 },
+            { x: 8, y: 15 }
+        ];
+
+        let food = { x: 25, y: 15 };
+        let dx = 1;
+        let dy = 0;
+        let score = 0;
+        let highScore = localStorage.getItem('cobalt_snake_high_score') || 0;
+        let gameOver = false;
+
+        highScoreEl.innerText = highScore;
+
+        function gameLoop() {
+            if (gameOver) {
+                drawGameOver();
+                return;
+            }
+
+            setTimeout(function onTick() {
+                clearCanvas();
+                drawFood();
+                moveSnake();
+                drawSnake();
+                gameLoop();
+            }, 1000 / 15);
+        }
+
+        function clearCanvas() {
+            ctx.fillStyle = '#141821';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw grid lines
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+            ctx.lineWidth = 1;
+            for (let x = 0; x < canvas.width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+        }
+
+        function drawSnake() {
+            snake.forEach((part, index) => {
+                if (index === 0) {
+                    ctx.fillStyle = '#2ecc71'; // Head
+                } else {
+                    ctx.fillStyle = '#27ae60'; // Body
+                }
+                ctx.fillRect(part.x * gridSize, part.y * gridSize, gridSize - 2, gridSize - 2);
+            });
+        }
+
+        function moveSnake() {
+            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+
+            // Wall collisions
+            if (head.x < 0 || head.x >= tileCountX || head.y < 0 || head.y >= tileCountY) {
+                gameOver = true;
+                return;
+            }
+
+            // Self collisions
+            for (let i = 0; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    gameOver = true;
+                    return;
+                }
+            }
+
+            snake.unshift(head);
+
+            // Check food collision
+            if (head.x === food.x && head.y === food.y) {
+                score += 10;
+                scoreEl.innerText = score;
+                if (score > highScore) {
+                    highScore = score;
+                    highScoreEl.innerText = highScore;
+                    localStorage.setItem('cobalt_snake_high_score', highScore);
+                }
+                generateFood();
+            } else {
+                snake.pop();
+            }
+        }
+
+        function drawFood() {
+            ctx.fillStyle = '#e74c3c';
+            ctx.shadowColor = '#e74c3c';
+            ctx.shadowBlur = 10;
+            ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
+            ctx.shadowBlur = 0;
+        }
+
+        function generateFood() {
+            food.x = Math.floor(Math.random() * tileCountX);
+            food.y = Math.floor(Math.random() * tileCountY);
+        }
+
+        function drawGameOver() {
+            ctx.fillStyle = 'rgba(11, 15, 25, 0.85)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#e74c3c';
+            ctx.font = 'bold 36px Inter, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 20);
+
+            ctx.fillStyle = '#f8fafc';
+            ctx.font = '18px Inter, sans-serif';
+            ctx.fillText('Final Score: ' + score, canvas.width / 2, canvas.height / 2 + 20);
+            ctx.fillText('Press Restart to Play Again', canvas.width / 2, canvas.height / 2 + 50);
+        }
+
+        function resetGame() {
+            snake = [
+                { x: 10, y: 15 },
+                { x: 9, y: 15 },
+                { x: 8, y: 15 }
+            ];
+            dx = 1;
+            dy = 0;
+            score = 0;
+            scoreEl.innerText = score;
+            gameOver = false;
+            generateFood();
+            gameLoop();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if ((e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') && dy !== 1) {
+                dx = 0; dy = -1;
+            } else if ((e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') && dy !== -1) {
+                dx = 0; dy = 1;
+            } else if ((e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') && dx !== 1) {
+                dx = -1; dy = 0;
+            } else if ((e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') && dx !== -1) {
+                dx = 1; dy = 0;
+            }
+        });
+
+        // Start initial game loop
+        gameLoop();
+    </script>
+</body>
+</html>
