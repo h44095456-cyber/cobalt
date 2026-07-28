@@ -622,6 +622,9 @@ func (p *Parser) parseMatchStmt() *ast.MatchStmt {
 	p.nextToken() // consume INDENT
 
 	for p.curToken.Type != token.DEDENT && p.curToken.Type != token.EOF {
+		if p.curToken.Type == token.CASE {
+			p.nextToken() // consume CASE
+		}
 		pattern := p.parseExpression(LOWEST)
 
 		var guard ast.Expression

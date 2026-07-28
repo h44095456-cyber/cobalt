@@ -37,6 +37,7 @@ const (
 	STRUCT TokenType = "STRUCT"
 	ENUM   TokenType = "ENUM"
 	MATCH  TokenType = "MATCH"
+	CASE   TokenType = "CASE"
 	TRAIT  TokenType = "TRAIT"
 	IMPL   TokenType = "IMPL"
 	SPAWN  TokenType = "SPAWN"
@@ -106,6 +107,7 @@ var keywords = map[string]TokenType{
 	"struct": STRUCT,
 	"enum":   ENUM,
 	"match":  MATCH,
+	"case":   CASE,
 	"trait":  TRAIT,
 	"impl":   IMPL,
 	"spawn":  SPAWN,

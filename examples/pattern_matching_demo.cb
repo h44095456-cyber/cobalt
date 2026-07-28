@@ -1,0 +1,27 @@
+# Cobalt Pattern Matching & Enums Demo
+# Demonstrates match expressions, pattern guards, and destructuring
+
+fn evaluate_status(status_code: int) -> string:
+    let result = ""
+    match status_code:
+        case 200 => result = "HTTP 200: OK"
+        case 404 => result = "HTTP 404: Not Found"
+        case 500 => result = "HTTP 500: Internal Server Error"
+        case _ => result = "HTTP Unknown Status Code"
+    return result
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Pattern Matching (match / case) Demo")
+    println("=================================================================")
+
+    let s1 = evaluate_status(200)
+    let s2 = evaluate_status(404)
+    let s3 = evaluate_status(500)
+    let s4 = evaluate_status(999)
+
+    println(f"[Match Result 1] {s1}")
+    println(f"[Match Result 2] {s2}")
+    println(f"[Match Result 3] {s3}")
+    println(f"[Match Result 4] {s4}")
+    println("=================================================================")
