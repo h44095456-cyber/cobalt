@@ -1982,10 +1982,16 @@ func (g *LLVMGenerator) generateExpression(buf *bytes.Buffer, expr ast.Expressio
 			buf.WriteString(fmt.Sprintf("    %s = sub i64 0, %s\n", resReg, rightReg))
 			return resReg, rightType, nil
 		}
-		if e.Operator == "!" {
-			resReg := g.freshReg()
-			buf.WriteString(fmt.Sprintf("    %s = xor i1 %s, true\n", resReg, rightReg))
-			return resReg, "i1", nil
+		if e.Operator == "!" || e.Operator == "not" {
+			if rightType == "i1" {
+				resReg := g.freshReg()
+				buf.WriteString(fmt.Sprintf("    %s = xor i1 %s, true\n", resReg, rightReg))
+				return resReg, "i1", nil
+			} else {
+				cmpReg := g.freshReg()
+				buf.WriteString(fmt.Sprintf("    %s = icmp eq %s %s, 0\n", cmpReg, rightType, rightReg))
+				return cmpReg, "i1", nil
+			}
 		}
 		return "", "", fmt.Errorf("unsupported prefix operator: %s", e.Operator)
 

@@ -1,0 +1,26 @@
+# Cobalt Try-Operator (?) Postfix Error Bubbling Demo
+
+fn validate_positive(x: int) -> Result:
+    if x > 0:
+        return Ok(x * 2)
+    else:
+        return Err("x must be positive")
+
+fn compute_pipeline(val: int) -> Result:
+    let r1 = validate_positive(val)?
+    return Ok(r1 + 100)
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Postfix Try-Operator (?) Error Bubbling Demo")
+    println("=================================================================")
+
+    let res1 = compute_pipeline(10)
+    if res1.is_ok:
+        println(f"[Try-Operator Pipeline] Success: {res1.val}")
+
+    let res2 = compute_pipeline(0 - 5)
+    if not res2.is_ok:
+        println(f"[Try-Operator Pipeline] Error Bubbled: {res2.err}")
+
+    println("=================================================================")

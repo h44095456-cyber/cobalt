@@ -891,15 +891,16 @@ func (cg *CodeGenerator) generateExpression(expr ast.Expression) (string, error)
 		}
 		return fmt.Sprintf("(%s).get()", innerStr), nil
 
-	case *ast.AsmExpr:
-		return fmt.Sprintf("__asm__ __volatile__(%q)", e.Instruction), nil
-
 	case *ast.PrefixExpr:
 		right, err := cg.generateExpression(e.Right)
 		if err != nil {
 			return "", err
 		}
-		return fmt.Sprintf("(%s%s)", e.Operator, right), nil
+		op := e.Operator
+		if op == "not" {
+			op = "!"
+		}
+		return fmt.Sprintf("(%s%s)", op, right), nil
 
 	case *ast.InfixExpr:
 		left, err := cg.generateExpression(e.Left)
