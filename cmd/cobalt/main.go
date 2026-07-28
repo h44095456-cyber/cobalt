@@ -206,6 +206,17 @@ func main() {
 		}
 		runOptReport(filePath)
 
+	case "header":
+		filePath := ""
+		if len(os.Args) >= 3 {
+			filePath = os.Args[2]
+		}
+		if filePath == "" {
+			fmt.Println("Error: missing input file for 'header'")
+			os.Exit(1)
+		}
+		generateCHeaderFile(filePath)
+
 	case "self-host":
 		runFile("examples/self_hosting_compiler.cb", "cpp")
 
@@ -1177,7 +1188,56 @@ func runBenchmarkSuite(filePath string) {
 	fmt.Printf("3. LLVM ORC JIT Latency:           %v\n", jitDuration)
 	fmt.Printf("4. C++20 AOT Build Latency:         %v\n", aotDuration)
 	fmt.Printf("-----------------------------------------------------------------\n")
-	speedup := float64(aotDuration) / float64(jitDuration)
-	fmt.Printf("BENCHMARK RESULT: JIT is %.2fx faster than AOT Build Latency!\n", speedup)
-	fmt.Printf("=================================================================\n")
+	fmt.Printf("JIT Latency is %.2fx faster than C++ AOT Compilation!\n", float64(aotDuration)/float64(jitDuration))
+}
+
+func generateCHeaderFile(filePath string) {
+	modResolver := resolver.New()
+	prog, err := modResolver.ResolveProgram(filePath)
+	if err != nil {
+		fmt.Printf("Error resolving module %s: %v\n", filePath, err)
+		os.Exit(1)
+	}
+
+	headerName := strings.TrimSuffix(filePath, filepath.Ext(filePath)) + ".h"
+	guardName := strings.ToUpper(strings.ReplaceAll(filepath.Base(headerName), ".", "_"))
+
+	var buf strings.Builder
+	buf.WriteString(fmt.Sprintf("#ifndef %s\n#define %s\n\n", guardName, guardName))
+	buf.WriteString("#ifdef __cplusplus\nextern \"C\" {\n#endif\n\n")
+	buf.WriteString("#include <stdint.h>\n#include <stdbool.h>\n\n")
+
+	for _, stmt := range prog.Statements {
+		if fn, ok := stmt.(*ast.FnDeclStmt); ok {
+			retType := "void"
+			if fn.ReturnType == "int" {
+				retType = "int64_t"
+			} else if fn.ReturnType == "float" {
+				retType = "double"
+			} else if fn.ReturnType == "string" {
+				retType = "const char*"
+			} else if fn.ReturnType == "bool" {
+				retType = "bool"
+			}
+
+			var params []string
+			for _, p := range fn.Params {
+				pType := "int64_t"
+				if p.Type == "float" {
+					pType = "double"
+				} else if p.Type == "string" {
+					pType = "const char*"
+				} else if p.Type == "bool" {
+					pType = "bool"
+				}
+				params = append(params, fmt.Sprintf("%s %s", pType, p.Name.Value))
+			}
+			buf.WriteString(fmt.Sprintf("%s %s(%s);\n", retType, fn.Name.Value, strings.Join(params, ", ")))
+		}
+	}
+
+	buf.WriteString("\n#ifdef __cplusplus\n}\n#endif\n\n#endif\n")
+
+	os.WriteFile(headerName, []byte(buf.String()), 0644)
+	fmt.Printf("Successfully generated C/C++ Header file at: %s\n", headerName)
 }
