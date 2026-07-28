@@ -1,5 +1,5 @@
 # 🐍 Cobalt 2D Interactive Raylib Snake Game Engine (examples/snake_raylib_game.cb)
-# Written 100% in Native Cobalt Source Code with Full Keyboard Steering & Game Loop
+# Written 100% in Native Cobalt Source Code with Continuous Interactive Keyboard Loop
 
 import std/raylib
 
@@ -12,7 +12,7 @@ fn run_snake_game():
     println("🐍 Cobalt Native Raylib Interactive 2D Snake Game Engine")
     println("=================================================================")
 
-    # 1. Initialize Window & Target FPS
+    # 1. Initialize Native Window & Target FPS
     std_raylib_init_window(800, 600, "Cobalt Native Raylib 2D Snake Game")
     std_raylib_set_fps(15)
 
@@ -25,10 +25,9 @@ fn run_snake_game():
     let food_y = 15
     let score = 0
     let is_game_over = false
-    let tick_count = 0
 
-    # 3. Game Loop (Runs for 100 Ticks / Frames)
-    while tick_count < 100:
+    # 3. Continuous Interactive Window Loop
+    while not std_raylib_should_close():
         # Check Steering Keys (W, A, S, D & Arrows)
         let key_up = std_raylib_is_key_down(87) or std_raylib_is_key_down(265)
         let key_down = std_raylib_is_key_down(83) or std_raylib_is_key_down(264)
@@ -49,11 +48,10 @@ fn run_snake_game():
             dir_y = 0
 
         if not is_game_over:
-            # Move Snake Head
             head_x = head_x + dir_x
             head_y = head_y + dir_y
 
-            # Check Wall Collisions (40x30 tiles)
+            # Wall Collisions Check (40x30 grid)
             if head_x < 0 or head_x >= 40 or head_y < 0 or head_y >= 30:
                 is_game_over = true
 
@@ -65,21 +63,14 @@ fn run_snake_game():
 
         # Frame Render Pass
         std_raylib_begin_drawing()
-        
-        # Background
-        std_raylib_draw_rect(0, 0, 800, 600, 20, 24, 33)
 
-        if is_game_over:
-            println(f"[Raylib Engine Frame {tick_count}] GAME OVER | Final Score: {score}")
-        else:
-            # Draw Food (Red)
+        if not is_game_over:
+            # Food (Red)
             std_raylib_draw_rect(food_x * 20, food_y * 20, 18, 18, 231, 76, 60)
-            
-            # Draw Snake Head (Emerald Green)
+            # Snake Head (Emerald Green)
             std_raylib_draw_rect(head_x * 20, head_y * 20, 18, 18, 46, 204, 113)
 
         std_raylib_end_drawing()
-        tick_count = tick_count + 1
 
     # 4. Teardown
     std_raylib_close_window()

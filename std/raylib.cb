@@ -50,6 +50,9 @@ fn init_window(width: int, height: int, title: string):
 fn close_window():
     println("[std::raylib] Closing Raylib Window")
 
+fn should_close() -> bool:
+    return false
+
 fn init_audio():
     println("[std::raylib] Initialized Raylib Audio Device Engine")
 

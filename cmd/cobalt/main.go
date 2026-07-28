@@ -918,7 +918,7 @@ func runFile(filePath string, backend string) {
 		os.Exit(1)
 	}
 
-	compileCmd := exec.Command("g++", "-O3", "-std=c++20", "-o", binFile, cppFile, "-pthread")
+	compileCmd := exec.Command("g++", "-O3", "-std=c++20", "-o", binFile, cppFile, "-pthread", "-lX11")
 	if output, err := compileCmd.CombinedOutput(); err != nil {
 		fmt.Printf("C++ Compilation Error:\n%s\n", string(output))
 		os.Exit(1)
