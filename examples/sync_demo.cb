@@ -1,0 +1,27 @@
+# Cobalt Standard Library Concurrency & Synchronization Demo (std::sync)
+
+import std/sync
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Multi-Threaded Synchronization (std::sync) Demo")
+    println("=================================================================")
+
+    # 1. Mutex Lock / Unlock Verification
+    let mutex = std_sync_create_mutex()
+    mutex = std_sync_mutex_lock(mutex)
+    println(f"[std::sync] Mutex Status Locked: {mutex.locked}")
+    mutex = std_sync_mutex_unlock(mutex)
+    println(f"[std::sync] Mutex Status Locked: {mutex.locked}")
+
+    # 2. WaitGroup Coordination Verification
+    let wg = std_sync_create_wait_group()
+    wg = std_sync_wg_add(wg, 4)
+    wg = std_sync_wg_done(wg)
+    println(f"[std::sync] Remaining WaitGroup Workers: {wg.counter}")
+
+    # 3. Atomic Int Operations Verification
+    let counter = std_sync_AtomicInt(100)
+    counter = std_sync_atomic_add(counter, 50)
+    println(f"[std::sync] Final Atomic Counter Value: {counter.value}")
+    println("=================================================================")

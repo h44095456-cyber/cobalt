@@ -10,14 +10,18 @@ type Optimizer struct {
 	foldedCount   int
 	deadCodeCount int
 	inlinedCount  int
+	constMap      map[string]int64
 }
 
 func New() *Optimizer {
-	return &Optimizer{}
+	return &Optimizer{
+		constMap: make(map[string]int64),
+	}
 }
 
 // Optimize runs iterative optimization passes until fixed point convergence.
 func (o *Optimizer) Optimize(program *ast.Program) *ast.Program {
+	o.constMap = make(map[string]int64)
 	for pass := 0; pass < 5; pass++ {
 		prevFolded := o.foldedCount
 		prevDead := o.deadCodeCount
@@ -52,6 +56,9 @@ func (o *Optimizer) optimizeStatement(stmt ast.Statement) ast.Statement {
 	switch s := stmt.(type) {
 	case *ast.VarDeclStmt:
 		s.Value = o.optimizeExpression(s.Value)
+		if intLit, ok := s.Value.(*ast.IntegerLiteral); ok {
+			o.constMap[s.Name.Value] = intLit.Value
+		}
 		return s
 
 	case *ast.ReturnStmt:
@@ -113,11 +120,17 @@ func (o *Optimizer) optimizeStatement(stmt ast.Statement) ast.Statement {
 }
 
 func (o *Optimizer) optimizeExpression(expr ast.Expression) ast.Expression {
-	if expr == nil {
-		return nil
-	}
-
 	switch e := expr.(type) {
+	case *ast.Identifier:
+		if val, ok := o.constMap[e.Value]; ok {
+			o.foldedCount++
+			return &ast.IntegerLiteral{
+				Token: token.Token{Literal: fmt.Sprintf("%d", val)},
+				Value: val,
+			}
+		}
+		return e
+
 	case *ast.InfixExpr:
 		e.Left = o.optimizeExpression(e.Left)
 		e.Right = o.optimizeExpression(e.Right)

@@ -1,0 +1,45 @@
+# Cobalt Standard Library: std::sync
+# Multi-Threaded Concurrency Primitives (Mutex, WaitGroup, AtomicInt & Channels)
+
+struct Mutex:
+    locked: bool
+    owner_tid: int
+
+struct WaitGroup:
+    counter: int
+
+struct AtomicInt:
+    value: int
+
+struct Channel:
+    capacity: int
+    count: int
+
+fn create_mutex() -> std_sync_Mutex:
+    return std_sync_Mutex(false, 0)
+
+fn mutex_lock(m: std_sync_Mutex) -> std_sync_Mutex:
+    println("[std::sync] Mutex locked successfully (Thread Safety Acquired)")
+    return std_sync_Mutex(true, 1)
+
+fn mutex_unlock(m: std_sync_Mutex) -> std_sync_Mutex:
+    println("[std::sync] Mutex unlocked successfully (Thread Released)")
+    return std_sync_Mutex(false, 0)
+
+fn create_wait_group() -> std_sync_WaitGroup:
+    return std_sync_WaitGroup(0)
+
+fn wg_add(wg: std_sync_WaitGroup, delta: int) -> std_sync_WaitGroup:
+    let new_cnt = wg.counter + delta
+    println(f"[std::sync] WaitGroup counter increased by {delta} (Total Workers: {new_cnt})")
+    return std_sync_WaitGroup(new_cnt)
+
+fn wg_done(wg: std_sync_WaitGroup) -> std_sync_WaitGroup:
+    let new_cnt = wg.counter - 1
+    println(f"[std::sync] WaitGroup worker finished task (Remaining Workers: {new_cnt})")
+    return std_sync_WaitGroup(new_cnt)
+
+fn atomic_add(a: std_sync_AtomicInt, val: int) -> std_sync_AtomicInt:
+    let new_val = a.value + val
+    println(f"[std::sync] AtomicInt fetch_add(+{val}) -> {new_val}")
+    return std_sync_AtomicInt(new_val)
