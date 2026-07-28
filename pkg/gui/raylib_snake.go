@@ -24,6 +24,7 @@ func RunNativeRaylibSnakeGame() {
 	rl.InitWindow(screenWidth, screenHeight, "🐍 Cobalt Native GUI 2D Snake Game (Raylib Engine)")
 	defer rl.CloseWindow()
 
+	rl.SetExitKey(0) // Disable ESC key auto-close
 	rl.SetTargetFPS(15)
 
 	snake := []Vector2D{
