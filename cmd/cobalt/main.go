@@ -206,6 +206,9 @@ func main() {
 		}
 		runOptReport(filePath)
 
+	case "self-host":
+		runFile("examples/self_hosting_compiler.cb", "cpp")
+
 	case "emit":
 		backend, filePath := parseRunArgs(os.Args[2:])
 		if filePath == "" {
