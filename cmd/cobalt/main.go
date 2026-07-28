@@ -968,6 +968,11 @@ func buildFile(filePath string, outFile string, backend string) {
 }
 
 func emitCode(filePath string, backend string) {
+	if backend == "bitcode" || backend == "bc" {
+		outFile := strings.TrimSuffix(filePath, filepath.Ext(filePath)) + ".bc"
+		emitBitcodeFile(filePath, outFile)
+		return
+	}
 	code, err := compileSource(filePath, backend)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
@@ -1346,4 +1351,19 @@ func runTypeInference(filePath string) {
 	inferencer := resolver.NewHMInferencer()
 	inferredMap := inferencer.InferProgram(prog)
 	fmt.Print(resolver.FormatHMReport(inferredMap))
+}
+
+func emitBitcodeFile(filePath string, outFile string) {
+	modResolver := resolver.New()
+	prog, err := modResolver.ResolveProgram(filePath)
+	if err != nil {
+		fmt.Printf("Error resolving module %s: %v\n", filePath, err)
+		os.Exit(1)
+	}
+
+	emitter := llvm.NewBitcodeEmitter()
+	if err := emitter.EmitBitcode(prog, outFile); err != nil {
+		fmt.Printf("Bitcode Emission Error: %v\n", err)
+		os.Exit(1)
+	}
 }
