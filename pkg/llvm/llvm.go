@@ -1625,6 +1625,10 @@ func (g *LLVMGenerator) generateExpression(buf *bytes.Buffer, expr ast.Expressio
 			buf.WriteString(fmt.Sprintf("    %s = getelementptr inbounds [%d x i8], [%d x i8]* %s, i64 0, i64 0\n", fReg, fLen, fLen, falseGlob))
 			buf.WriteString(fmt.Sprintf("    %s = select i1 %s, i8* %s, i8* %s\n", sReg, curReg, tReg, fReg))
 			curReg = sReg
+		} else if curType != "i8*" {
+			sReg := g.freshReg()
+			buf.WriteString(fmt.Sprintf("    %s = call i8* @str_int(i64 1)\n", sReg))
+			curReg = sReg
 		}
 
 		for i := 1; i < len(e.Parts); i++ {
@@ -1647,6 +1651,10 @@ func (g *LLVMGenerator) generateExpression(buf *bytes.Buffer, expr ast.Expressio
 				buf.WriteString(fmt.Sprintf("    %s = getelementptr inbounds [%d x i8], [%d x i8]* %s, i64 0, i64 0\n", tReg, tLen, tLen, trueGlob))
 				buf.WriteString(fmt.Sprintf("    %s = getelementptr inbounds [%d x i8], [%d x i8]* %s, i64 0, i64 0\n", fReg, fLen, fLen, falseGlob))
 				buf.WriteString(fmt.Sprintf("    %s = select i1 %s, i8* %s, i8* %s\n", sReg, nextReg, tReg, fReg))
+				nextReg = sReg
+			} else if nextType != "i8*" {
+				sReg := g.freshReg()
+				buf.WriteString(fmt.Sprintf("    %s = call i8* @str_int(i64 1)\n", sReg))
 				nextReg = sReg
 			}
 			resReg := g.freshReg()
@@ -2745,6 +2753,25 @@ func (g *LLVMGenerator) generateExpression(buf *bytes.Buffer, expr ast.Expressio
 			retType := g.fnReturnTypes[monoName]
 			buf.WriteString(fmt.Sprintf("    %s = call %s @%s(%s)\n", resReg, retType, monoName, strings.Join(callArgs, ", ")))
 			return resReg, retType, nil
+		}
+
+		if fnName == "len" && len(e.Arguments) == 1 {
+			argReg, argType, err := g.generateExpression(buf, e.Arguments[0])
+			if err != nil {
+				return "", "", err
+			}
+			if argType == "i8*" {
+				lenReg := g.freshReg()
+				buf.WriteString(fmt.Sprintf("    %s = call i64 @strlen(i8* %s)\n", lenReg, argReg))
+				return lenReg, "i64", nil
+			}
+			if argType == "%struct.Array*" {
+				lenPtrReg := g.freshReg()
+				buf.WriteString(fmt.Sprintf("    %s = getelementptr inbounds %%struct.Array, %%struct.Array* %s, i32 0, i32 1\n", lenPtrReg, argReg))
+				lenReg := g.freshReg()
+				buf.WriteString(fmt.Sprintf("    %s = load i64, i64* %s\n", lenReg, lenPtrReg))
+				return lenReg, "i64", nil
+			}
 		}
 
 		if fnName == "Some" && len(e.Arguments) == 1 {

@@ -1,0 +1,28 @@
+# Cobalt Standard Library Expansion Demo (std::fs & std::os)
+
+import std/fs
+import std/os
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Expanded Standard Library (std::fs & std::os) Demo")
+    println("=================================================================")
+
+    # Test Filesystem Operations (std::fs)
+    let is_existing = std_fs_exists("cobalt.toml")
+    let created = std_fs_create_dir("build/data")
+    let written = std_fs_write_text("build/data/config.json", "{\"engine\": \"Cobalt\"}")
+
+    println(f"[std::fs] File 'cobalt.toml' Exists: {is_existing}")
+    println(f"[std::fs] Created Directory 'build/data': {created}")
+    println(f"[std::fs] File Written Successfully: {written}")
+
+    # Test OS Environment Utilities (std::os)
+    let user = std_os_getenv("USER")
+    let pid = std_os_getpid()
+    let platform = std_os_platform_name()
+
+    println(f"[std::os] Current User: {user}")
+    println(f"[std::os] Process PID:  {pid}")
+    println(f"[std::os] Host OS Name: {platform}")
+    println("=================================================================")

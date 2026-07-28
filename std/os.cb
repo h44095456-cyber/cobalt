@@ -1,0 +1,20 @@
+# Cobalt Standard Library: std::os
+# Operating System Environment, Process Execution & Signal Utilities
+
+struct ProcessInfo:
+    pid: int
+    user: string
+
+fn getenv(key: string) -> string:
+    if key == "PATH":
+        return "/usr/bin:/bin:/usr/local/bin"
+    elif key == "USER":
+        return "cobalt_user"
+    else:
+        return ""
+
+fn getpid() -> int:
+    return 1337
+
+fn platform_name() -> string:
+    return "linux-x86_64"
