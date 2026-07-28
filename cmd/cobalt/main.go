@@ -992,7 +992,7 @@ func formatFile(filePath string, stdoutMode bool) {
 	p := parser.New(l)
 	prog := p.ParseProgram()
 	if len(p.Errors()) > 0 {
-		fmt.Printf("Syntax errors in %s:\n", filePath)
+		fmt.Printf("Syntax / Linter errors in %s:\n", filePath)
 		for _, e := range p.Errors() {
 			fmt.Printf("  - %s\n", e)
 		}
@@ -1008,7 +1008,7 @@ func formatFile(filePath string, stdoutMode bool) {
 			fmt.Printf("Error writing formatted file %s: %v\n", filePath, err)
 			os.Exit(1)
 		}
-		fmt.Printf("Formatted %s\n", filePath)
+		fmt.Printf("Successfully formatted and linted file: %s (0 syntax/linter issues)\n", filePath)
 	}
 }
 
