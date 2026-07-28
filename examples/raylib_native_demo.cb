@@ -1,24 +1,28 @@
-# Cobalt Native Raylib Engine Demo (std::raylib)
+# Cobalt Native Raylib 2D/3D & Audio Engine Suite (examples/raylib_native_demo.cb)
 
 import std/raylib
 
 fn main():
     println("=================================================================")
-    println("Cobalt Native Raylib Engine (std::raylib) Demo")
+    println("Cobalt Native Raylib 2D/3D & Audio Engine (std::raylib) Suite")
     println("=================================================================")
 
-    # 1. Initialize Raylib GPU Window
-    std_raylib_init_window(1280, 720, "Cobalt 2D/3D Native Raylib Window")
-    std_raylib_set_fps(60)
+    # 1. Initialize Window & Audio Device
+    std_raylib_init_window(1280, 720, "Cobalt 3D Native Raylib Engine")
+    std_raylib_init_audio()
 
-    # 2. Render Frame Pipeline
-    std_raylib_begin_drawing()
-    std_raylib_draw_rect(100, 100, 400, 300, 46, 204, 113)
-    std_raylib_end_drawing()
+    # 2. Render 3D Shapes & Spatial Geometry
+    std_raylib_draw_cube_3d(0.0, 1.0, 0.0, 2.0, 2.0, 2.0)
+    std_raylib_draw_sphere_3d(3.0, 1.0, 0.0, 1.5)
 
-    # 3. Input Key Queries
-    let key_space = std_raylib_is_key_down(32) # KEY_SPACE
-    println(f"[std::raylib] Space Key Pressed: {key_space}")
+    # 3. Query Mouse & Input Devices
+    let mouse_pos = std_raylib_get_mouse_position()
+    let mouse_click = std_raylib_is_mouse_button_pressed(0) # MOUSE_BUTTON_LEFT
 
+    println(f"[std::raylib Input] Mouse Position: ({mouse_pos.x}, {mouse_pos.y})")
+    println(f"[std::raylib Input] Left Click Pressed: {mouse_click}")
+
+    # 4. Teardown Windows & Audio Device
+    std_raylib_close_audio()
     std_raylib_close_window()
     println("=================================================================")
