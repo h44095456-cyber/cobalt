@@ -1,0 +1,28 @@
+# Cobalt Standard Library Expansion Demo (std::regex & std::env)
+
+import std/regex
+import std/env
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Standard Library (std::regex & std::env) Expansion Demo")
+    println("=================================================================")
+
+    # 1. Regular Expression Operations (std::regex)
+    let text = "User contact email: alice@cobalt-lang.org"
+    let matched = std_regex_is_match(text, "[a-z]+@[a-z.]+")
+    let cleaned = std_regex_replace(text, "alice", "bob")
+
+    println(f"[std::regex] Regex Pattern Match Result: {matched}")
+    println(f"[std::regex] Regex Text Replacement:      {cleaned}")
+
+    # 2. System Hardware Metrics (std::env)
+    let sys_info = std_env_get_system_info()
+    let cores = std_env_num_cpu_cores()
+    let ram = std_env_total_memory_mb()
+
+    println(f"[std::env] Host CPU Core Count:      {cores} Cores")
+    println(f"[std::env] Total System Memory RAM: {ram} MB")
+    println(f"[std::env] System Hostname:         {sys_info.hostname}")
+    println(f"[std::env] Operating System:        {sys_info.os_name}")
+    println("=================================================================")
