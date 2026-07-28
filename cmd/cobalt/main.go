@@ -7,6 +7,7 @@ import (
 	"cobalt/pkg/codegen"
 	"cobalt/pkg/debugger"
 	"cobalt/pkg/docgen"
+	"cobalt/pkg/gui"
 	"cobalt/pkg/jit"
 	"cobalt/pkg/lexer"
 	"cobalt/pkg/llvm"
@@ -281,6 +282,9 @@ func main() {
 
 	case "self-host":
 		runFile("examples/self_hosting_compiler.cb", "cpp")
+
+	case "play", "gui":
+		gui.RunNativeRaylibSnakeGame()
 
 	case "emit":
 		backend, filePath := parseRunArgs(os.Args[2:])
