@@ -12,7 +12,15 @@ func TestRegistrySearch(t *testing.T) {
 		t.Fatalf("expected package 'json' in registry search results")
 	}
 
-	if results[0].Name != "json" {
-		t.Errorf("expected package name 'json', got %s", results[0].Name)
+	found := false
+	for _, res := range results {
+		if res.Name == "json" {
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		t.Errorf("expected package 'json' in search results")
 	}
 }

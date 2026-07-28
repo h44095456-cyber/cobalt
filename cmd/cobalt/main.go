@@ -251,6 +251,26 @@ func main() {
 		}
 		runTypeInference(filePath)
 
+	case "registry":
+		if len(os.Args) >= 3 && (os.Args[2] == "--web" || os.Args[2] == "-web") {
+			htmlContent := registry.GenerateRegistryWebPortalHTML()
+			htmlFile := "docs/registry.html"
+			os.MkdirAll("docs", 0755)
+			os.WriteFile(htmlFile, []byte(htmlContent), 0644)
+			fmt.Printf("Successfully generated Cobalt Package Registry Web Dashboard at ./%s\n", htmlFile)
+		} else {
+			query := ""
+			if len(os.Args) >= 3 {
+				query = os.Args[2]
+			}
+			reg := registry.New()
+			results := reg.Search(query)
+			fmt.Printf("Found %d packages in registry matching '%s':\n", len(results), query)
+			for _, pkg := range results {
+				fmt.Printf("  - %s (v%s): %s\n", pkg.Name, pkg.Version, pkg.Description)
+			}
+		}
+
 	case "self-host":
 		runFile("examples/self_hosting_compiler.cb", "cpp")
 
