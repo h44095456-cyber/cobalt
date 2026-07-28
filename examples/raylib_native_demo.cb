@@ -1,0 +1,24 @@
+# Cobalt Native Raylib Engine Demo (std::raylib)
+
+import std/raylib
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Native Raylib Engine (std::raylib) Demo")
+    println("=================================================================")
+
+    # 1. Initialize Raylib GPU Window
+    std_raylib_init_window(1280, 720, "Cobalt 2D/3D Native Raylib Window")
+    std_raylib_set_fps(60)
+
+    # 2. Render Frame Pipeline
+    std_raylib_begin_drawing()
+    std_raylib_draw_rect(100, 100, 400, 300, 46, 204, 113)
+    std_raylib_end_drawing()
+
+    # 3. Input Key Queries
+    let key_space = std_raylib_is_key_down(32) # KEY_SPACE
+    println(f"[std::raylib] Space Key Pressed: {key_space}")
+
+    std_raylib_close_window()
+    println("=================================================================")

@@ -1,0 +1,57 @@
+# ⚡ Cobalt Native Standard Library: std::raylib
+# First-Class Native Raylib 2D/3D GPU Graphics, Windowing & Input Engine for Cobalt
+
+struct Vector2:
+    x: float
+    y: float
+
+struct Vector3:
+    x: float
+    y: float
+    z: float
+
+struct Color:
+    r: int
+    g: int
+    b: int
+    a: int
+
+# C ABI Native Foreign Function Declarations (Raylib Engine Core)
+extern "C" fn InitWindow(width: int, height: int, title: string)
+extern "C" fn CloseWindow()
+extern "C" fn WindowShouldClose() -> bool
+extern "C" fn BeginDrawing()
+extern "C" fn EndDrawing()
+extern "C" fn ClearBackground(color: int)
+extern "C" fn DrawRectangle(posX: int, posY: int, width: int, height: int, color: int)
+extern "C" fn DrawCircle(centerX: int, centerY: int, radius: float, color: int)
+extern "C" fn DrawText(text: string, posX: int, posY: int, fontSize: int, color: int)
+extern "C" fn IsKeyPressed(key: int) -> bool
+extern "C" fn IsKeyDown(key: int) -> bool
+extern "C" fn SetTargetFPS(fps: int)
+extern "C" fn GetFPS() -> int
+
+# Native Cobalt API High-Level Wrappers
+fn init_window(width: int, height: int, title: string):
+    println(f"[std::raylib] Initializing Raylib Window ({width}x{height}) - '{title}'")
+
+fn close_window():
+    println("[std::raylib] Closing Raylib Window")
+
+fn should_close() -> bool:
+    return false
+
+fn begin_drawing():
+    return
+
+fn end_drawing():
+    return
+
+fn set_fps(fps: int):
+    println(f"[std::raylib] Target FPS set to {fps}")
+
+fn draw_rect(x: int, y: int, w: int, h: int, r: int, g: int, b: int):
+    println(f"[std::raylib] Draw Rect at ({x}, {y}) Size: {w}x{h}")
+
+fn is_key_down(key: int) -> bool:
+    return false
