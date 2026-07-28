@@ -847,6 +847,10 @@ func compileSource(filePath string, backend string) (string, error) {
 		llvmGen := llvm.New()
 		return llvmGen.Generate(prog)
 	}
+	if backend == "wasm" || backend == "wasm32" {
+		wasmGen := wasm.New()
+		return wasmGen.Generate(prog)
+	}
 
 	cg := codegen.New()
 	return cg.Generate(prog)
