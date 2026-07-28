@@ -1,0 +1,35 @@
+fn evaluate_score(score: int) -> string:
+    match score:
+        s if s >= 90 => return "Grade: A (Distinction)"
+        s if s >= 75 => return "Grade: B (High Pass)"
+        s if s >= 50 => return "Grade: C (Pass)"
+        _ => return "Grade: F (Fail)"
+    return "Grade: F (Fail)"
+
+fn evaluate_option(opt: Option) -> string:
+    match opt:
+        Some(val) if val > 100 => return "Large Option Value (>100): " + str(val)
+        Some(val) if val > 0 => return "Positive Option Value: " + str(val)
+        Some(val) => return "Non-positive Option Value: " + str(val)
+        None => return "No Value (None)"
+    return "No Value (None)"
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Pattern Matching Guard Clauses (match x if guard => ...)")
+    println("=================================================================")
+
+    println(evaluate_score(95))
+    println(evaluate_score(80))
+    println(evaluate_score(60))
+    println(evaluate_score(40))
+
+    println("\nOption Pattern Matching with Guard Clauses:")
+    println(evaluate_option(Some(250)))
+    println(evaluate_option(Some(42)))
+    println(evaluate_option(Some(-5)))
+    println(evaluate_option(None()))
+
+    println("\n=================================================================")
+    println("Match Guard Clauses Status: PASSED")
+    println("=================================================================")

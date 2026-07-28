@@ -1,0 +1,13 @@
+fn get_http_message(status: int) -> string:
+    match status:
+        200 => return "200 OK"
+        404 => return "404 Not Found"
+        500 => return "500 Internal Server Error"
+        _ => return "Unknown Status Code"
+
+fn main():
+    println("HTTP Status Code Resolver:")
+    println(get_http_message(200))
+    println(get_http_message(404))
+    println(get_http_message(500))
+    println(get_http_message(418))

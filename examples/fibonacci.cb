@@ -1,0 +1,11 @@
+fn fib(n: int) -> int:
+    if n <= 1:
+        return n
+    return fib(n - 1) + fib(n - 2)
+
+fn main():
+    println("Calculating Fibonacci sequence in Cobalt:")
+    var i = 0
+    while i <= 10:
+        println("fib(" + str(i) + ") = " + str(fib(i)))
+        i = i + 1

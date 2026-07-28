@@ -1,0 +1,11 @@
+fn main():
+    let x = 10 + 20 * 2
+    let msg = "Hello, " + "Cobalt AST Optimizer!"
+    let flag = true and false
+
+    if false:
+        println("Unreachable dead code")
+
+    println(msg)
+    return 0
+    println("Dead code after return")

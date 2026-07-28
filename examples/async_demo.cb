@@ -1,0 +1,33 @@
+# Cobalt Async / Await Coroutine Engine Demo
+# Demonstrates async fn, concurrent task execution, and await resolution
+
+async fn compute_task(id: int, base: int) -> int:
+    println(f"[Task {id}] Performing asynchronous background calculation...")
+    return base * 2 + 10
+
+async fn fetch_user_data(username: string) -> string:
+    println(f"[Network Task] Fetching remote payload for '{username}'...")
+    return f"User Record ({username})"
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Async / Await Coroutine Engine Demo")
+    println("=================================================================")
+
+    # Launch concurrent async tasks
+    let task1 = compute_task(1, 20)
+    let task2 = compute_task(2, 50)
+    let network_task = fetch_user_data("kaung")
+
+    println("[Main Thread] Non-blocking tasks launched in background.")
+    println("[Main Thread] Performing main loop computations...")
+
+    # Await resolution
+    let res1 = await task1
+    let res2 = await task2
+    let payload = await network_task
+
+    println(f"[Resolved] Task 1 Result: {res1}")
+    println(f"[Resolved] Task 2 Result: {res2}")
+    println(f"[Resolved] Network Payload: {payload}")
+    println("=================================================================")

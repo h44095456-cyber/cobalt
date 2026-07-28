@@ -1,0 +1,19 @@
+macro log_info(msg):
+    println("[MACRO LOG] " + msg)
+
+macro assert_gt(val, min_val):
+    if val <= min_val:
+        println("[ASSERTION FAILED] " + str(val) + " is not greater than " + str(min_val))
+    else:
+        println("[ASSERTION PASSED] " + str(val) + " > " + str(min_val))
+
+fn main():
+    println("Testing Metaprogramming & Macro System in Cobalt:")
+
+    log_info("Initializing Cobalt application environment...")
+
+    let x = 42
+    assert_gt(x, 10)
+
+    let y = 5
+    assert_gt(y, 100)

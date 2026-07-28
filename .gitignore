@@ -1,0 +1,30 @@
+# Binaries & Temporary Build Outputs
+a.out
+*.exe
+*.o
+*.so
+*.dylib
+*.dll
+*.ll
+*.wat
+*.wasm
+*.wal
+*.ppm
+*.txt
+file1.txt
+file2.txt
+file3.txt
+output_raytrace.ppm
+fib_demo
+fib_llvm_native
+document.cb
+bin/crayon_cpp
+bin/crayon_llvm
+cobalt_output.txt
+user_code.cb
+self_hosted_out.cpp
+
+# OS / IDE Junk
+.DS_Store
+*.swp
+*.tmp

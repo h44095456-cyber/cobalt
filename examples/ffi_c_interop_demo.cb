@@ -1,0 +1,14 @@
+extern "C" fn system(cmd: string) -> int
+extern "C" fn puts(s: string) -> int
+extern "C" fn abs(x: int) -> int
+
+fn main():
+    println("Testing Foreign Function Interface (FFI) & C Interop in Cobalt:")
+
+    let positive = abs(-42)
+    println("abs(-42) via C FFI: " + str(positive))
+
+    puts("Hello directly from C puts()!")
+
+    let status = system("echo 'Cobalt executing shell command via C system() FFI'")
+    println("C system() exit code: " + str(status))

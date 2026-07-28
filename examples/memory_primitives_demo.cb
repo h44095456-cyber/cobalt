@@ -1,0 +1,13 @@
+fn main():
+    println("Testing Memory Management Primitives (Box<T>, Rc<T>) in Cobalt:")
+
+    # 1. Heap Allocation via Box
+    let heap_val = Box(42)
+    println("Allocated Box(42) on heap successfully.")
+
+    # 2. Reference Counted Smart Pointer via Rc
+    let shared1 = Rc(100)
+    let shared2 = shared1
+    println("Allocated Rc(100) with reference-counted smart pointer sharing.")
+
+    println("Memory management primitives successfully executed!")

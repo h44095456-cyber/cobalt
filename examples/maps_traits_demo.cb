@@ -1,0 +1,20 @@
+trait Printable:
+    fn to_string(self) -> string
+
+struct Rectangle:
+    width: int
+    height: int
+
+impl Printable for Rectangle:
+    fn to_string(self) -> string:
+        return "Rectangle(" + str(self.width) + "x" + str(self.height) + ")"
+
+fn main():
+    println("Testing Maps & Traits in Cobalt:")
+
+    let scores = {"alice": 95, "bob": 88}
+    println("Alice score: " + str(scores["alice"]))
+    println("Bob score:   " + str(scores["bob"]))
+
+    let rect = Rectangle(10, 20)
+    println("Printable rect: " + rect.to_string())

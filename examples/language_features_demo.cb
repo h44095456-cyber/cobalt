@@ -1,0 +1,40 @@
+fn get_score(status: string) -> Option:
+    if status == "ok":
+        return Some(95)
+    return None
+
+fn main():
+    # 1. Option & Try Operator (?)
+    let s1 = get_score("ok")?
+    println(f"Try operator score: {s1}")
+
+    # 2. Nullish Coalescing Operator (??)
+    let val1 = 0
+    let fallback = val1 ?? 100
+    println(f"Nullish Coalescing fallback: {fallback}")
+
+    # 3. Array Utility Suite (sort, reverse, contains, join, find)
+    var numbers = [42, 10, 88, 5, 23]
+    numbers.sort()
+    println(f"Sorted numbers: {numbers}")
+
+    numbers.reverse()
+    println(f"Reversed numbers: {numbers}")
+
+    if numbers.contains(88):
+        println("Numbers contains 88: true")
+
+    let idx = numbers.find(10)
+    println(f"Index of 10: {idx}")
+
+    let words = ["Cobalt", "Language", "2026"]
+    let sentence = words.join(" ")
+    println(f"Joined string: {sentence}")
+
+    # 4. Pattern Matching Range & Multi-Branch Guards
+    let score = 95
+    match score:
+        90..100 => println("Grade: A+")
+        80..89 => println("Grade: A")
+        70..79 => println("Grade: B")
+        _ => println("Grade: C")

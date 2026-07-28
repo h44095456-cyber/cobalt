@@ -1,0 +1,28 @@
+fn identity<T>(x: T) -> T:
+    return x
+
+struct Stack<T>:
+    items: T[]
+
+fn main():
+    println("Testing Generics & Closures in Cobalt:")
+
+    let num = identity(42)
+    println("Generic num: " + str(num))
+
+    let double_fn = fn(x: int) -> int:
+        return x * 2
+
+    println("double_fn(15): " + str(double_fn(15)))
+
+    let numbers = [1, 2, 3, 4, 5, 6]
+
+    let doubled = numbers.map(fn(x: int) -> int: return x * 2)
+    println("Doubled numbers:")
+    for d in doubled:
+        println(str(d))
+
+    let evens = numbers.filter(fn(x: int) -> bool: return x % 2 == 0)
+    println("Filtered evens:")
+    for e in evens:
+        println(str(e))

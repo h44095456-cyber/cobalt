@@ -1,0 +1,35 @@
+@derive(Debug, Clone, Eq)
+struct Point:
+    x: int
+    y: int
+
+@inline
+fn add_inline(a: int, b: int) -> int:
+    return a + b
+
+fn main():
+    let p1 = Point(10, 20)
+    let p2 = Point(10, 20)
+    let p3 = Point(30, 40)
+
+    # Test @derive(Debug)
+    println(p1.to_string())
+
+    # Test @derive(Clone)
+    let p1_cloned = p1.clone()
+    println(p1_cloned.to_string())
+
+    # Test @derive(Eq)
+    if p1.equals(p2):
+        println("p1 equals p2: true")
+    else:
+        println("p1 equals p2: false")
+
+    if p1.equals(p3):
+        println("p1 equals p3: true")
+    else:
+        println("p1 equals p3: false")
+
+    # Test @inline
+    let sum = add_inline(15, 25)
+    println(f"Inline sum: {sum}")

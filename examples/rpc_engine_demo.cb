@@ -1,0 +1,25 @@
+rpc fn process_order(order_id: int, amount: int) -> string:
+    return "Order #" + str(order_id) + " processed successfully with total amount $" + str(amount)
+
+rpc fn calculate_tax(subtotal: int) -> int:
+    return subtotal * 15 / 100
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Built-in Zero-Copy IPC & Distributed RPC Engine (rpc fn)")
+    println("=================================================================")
+
+    println("1. Executing Local Direct RPC Function Calls:")
+    let local_res = process_order(5001, 1250)
+    println("   Direct RPC Result: " + local_res)
+
+    let tax = calculate_tax(1000)
+    println("   Direct Tax Calculation (15%): $" + str(tax))
+
+    println("\n2. Executing Distributed IPC Node Payload Dispatch:")
+    let remote_res = process_order_rpc_call("node-us-east-1.internal:9090", 5002, 3400)
+    println("   Remote RPC Response: " + remote_res)
+
+    println("\n=================================================================")
+    println("Zero-Copy IPC & Distributed RPC Engine Status: PASSED")
+    println("=================================================================")

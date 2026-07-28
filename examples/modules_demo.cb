@@ -1,0 +1,7 @@
+import math_utils
+
+fn main():
+    println("Testing Cobalt Module Import System:")
+    let val = 5
+    println("5 squared = " + str(math_utils.square(val)))
+    println("5 cubed   = " + str(math_utils.cube(val)))

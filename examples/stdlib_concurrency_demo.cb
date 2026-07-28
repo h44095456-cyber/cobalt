@@ -1,0 +1,26 @@
+fn worker(ch: Channel):
+    println("Worker thread executing in background...")
+    ch.send(999)
+
+fn main():
+    println("Testing Standard Library & Concurrency in Cobalt:")
+
+    let t1 = sys.now_millis()
+    println("Start time (ms): " + str(t1))
+
+    let filename = "cobalt_output.txt"
+    let sample_text = "Hello from Cobalt Standard Library and Native File I/O!"
+    fs.write_file(filename, sample_text)
+    println("Wrote file: " + filename)
+
+    let read_back = fs.read_file(filename)
+    println("Read file content: " + read_back)
+
+    let ch = Channel()
+    spawn worker(ch)
+
+    let val = ch.recv()
+    println("Received from worker thread via Channel: " + str(val))
+
+    let t2 = sys.now_millis()
+    println("End time (ms): " + str(t2))

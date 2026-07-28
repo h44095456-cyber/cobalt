@@ -1,0 +1,35 @@
+fn find_even(num: int) -> Option:
+    if num % 2 == 0:
+        return Some(num)
+    else:
+        return None
+
+fn divide(a: int, b: int) -> Result:
+    if b == 0:
+        return Err("division by zero error")
+    else:
+        return Ok(a / b)
+
+fn main():
+    println("Testing Option Type:")
+    let opt1 = find_even(4)
+    match opt1:
+        Some(val) => println("Found even: " + str(val))
+        None => println("Not even")
+
+    let opt2 = find_even(7)
+    match opt2:
+        Some(val) => println("Found even: " + str(val))
+        None => println("Not even")
+
+    println("")
+    println("Testing Result Type:")
+    let res1 = divide(10, 2)
+    match res1:
+        Ok(val) => println("Divide success: " + str(val))
+        Err(msg) => println("Divide failed: " + msg)
+
+    let res2 = divide(10, 0)
+    match res2:
+        Ok(val) => println("Divide success: " + str(val))
+        Err(msg) => println("Divide failed: " + msg)

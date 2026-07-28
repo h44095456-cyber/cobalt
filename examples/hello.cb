@@ -1,0 +1,5 @@
+fn main():
+    println("Hello, World from Cobalt!")
+    let a = 15
+    let b = 27
+    println("15 + 27 = " + str(a + b))

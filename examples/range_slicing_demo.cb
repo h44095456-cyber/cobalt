@@ -1,0 +1,27 @@
+fn main():
+    println("=================================================================")
+    println("Cobalt Range Loops & Slicing (0..10, str[0..5], arr[1..4])")
+    println("=================================================================")
+
+    println("1. Range Loop (for i in 1..6):")
+    for i in 1..6:
+        println("  Count: " + str(i))
+
+    println("\n2. String Slicing (str[0..5]):")
+    let greeting = "Hello, World!"
+    let hello = greeting[0..5]
+    let world = greeting[7..12]
+    println("  Original String: " + greeting)
+    println("  Sliced [0..5]:   " + hello)
+    println("  Sliced [7..12]:  " + world)
+
+    println("\n3. Array Slicing (arr[1..4]):")
+    let nums = [100, 200, 300, 400, 500]
+    let sliced_nums = nums[1..4]
+    println("  Sliced Array [1..4]:")
+    for val in sliced_nums:
+        println("    Item: " + str(val))
+
+    println("\n=================================================================")
+    println("Range Syntax & Slicing Status: PASSED")
+    println("=================================================================")

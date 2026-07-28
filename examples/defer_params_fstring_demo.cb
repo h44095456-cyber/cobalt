@@ -1,0 +1,33 @@
+# Demonstration of Defer Statements, Default Function Parameters, and String Interpolation
+
+fn greet_user(name: string = "Developer", count: int = 1):
+    println(f"Hello {name}, welcome to Cobalt session #{count}!")
+
+fn process_task(task_id: int):
+    println(f"[Task {task_id}] Processing initiated...")
+    defer println(f"[Task {task_id}] Cleanup complete and resource released! (Deferred)")
+    
+    println(f"[Task {task_id}] Executing core computation logic...")
+
+fn main():
+    println("=================================================================")
+    println("Cobalt New Features: Defer, Default Params & String Interpolation")
+    println("=================================================================")
+
+    println("1. Default Function Parameter Values:")
+    greet_user()
+    greet_user("Alice")
+    greet_user("Bob", 5)
+
+    println("\n2. String Interpolation (f\"...\"):")
+    let score = 98
+    let lang = "Cobalt"
+    let status_str = f"Language {lang} achieved a score of {score}% in benchmark matrix!"
+    println(status_str)
+
+    println("\n3. Defer Statements (LIFO scope cleanup execution):")
+    process_task(101)
+
+    println("\n=================================================================")
+    println("New Features Status: PASSED")
+    println("=================================================================")

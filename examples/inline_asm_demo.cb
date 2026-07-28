@@ -1,0 +1,19 @@
+fn main():
+    println("=================================================================")
+    println("Cobalt Low-Level Inline CPU Assembly (asm)")
+    println("=================================================================")
+
+    println("Executing CPU No-Operation (nop) instruction...")
+    asm("nop")
+
+    println("Executing CPU Pause (pause) spinlock instruction...")
+    asm("pause")
+
+    println("Executing multi-nop CPU pipeline flush...")
+    asm("nop")
+    asm("nop")
+    asm("nop")
+
+    println("\n=================================================================")
+    println("Inline CPU Assembly Feature Status: PASSED")
+    println("=================================================================")

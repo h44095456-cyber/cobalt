@@ -1,0 +1,38 @@
+# Cobalt Standard Library Demo & Test Suite
+# Imports std::crypto, std::json, std::path, std::http
+
+import std/crypto
+import std/json
+import std/path
+import std/http
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Standard Library Test Suite (std::*)")
+    println("=================================================================")
+
+    # 1. std::crypto Base64 Encoding
+    let text = "Cobalt"
+    let b64 = std_crypto_base64_encode(text)
+    println(f"Base64 Encoded ('{text}'): {b64}")
+
+    # 2. std::path File Path Utilities
+    let full_path = "/var/log/cobalt/app.log"
+    let base = std_path_basename(full_path)
+    let extension = std_path_ext(full_path)
+    let joined = std_path_join("/usr/local", "bin/cobalt")
+    println(f"Path Basename:  {base}")
+    println(f"Path Extension: {extension}")
+    println(f"Joined Path:    {joined}")
+
+    # 3. std::json Validation
+    let json_text = "{\"name\": \"Cobalt\", \"version\": 2.0}"
+    let is_valid = std_json_valid(json_text)
+    println(f"JSON Validation ('{json_text}'): {is_valid}")
+
+    # 4. std::http Data Structures
+    let req = std_http_parse_request_line("GET /api/v1/status HTTP/1.1")
+    let res = std_http_make_response(200, "OK", "{\"status\": \"healthy\"}")
+    println(f"HTTP Request:  {req.method} {req.path}")
+    println(f"HTTP Response: {res.status_code} {res.status_text} -> {res.body}")
+    println("=================================================================")

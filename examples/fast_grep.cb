@@ -1,0 +1,94 @@
+# ==============================================================================
+# High-Speed Multi-Threaded File Search Utility (ripgrep in Cobalt)
+# Written 100% in Cobalt (.cb) using worker threads and Channel concurrency.
+# ==============================================================================
+
+fn search_file_worker(filename: string, query: string, ch: Channel):
+    let content = fs.read_file(filename)
+    let n = len(content)
+    let q_len = len(query)
+
+    if n == 0 or q_len == 0:
+        ch.send(0)
+        return
+
+    let line_num = 1
+    let line_start = 0
+    let match_count = 0
+    let i = 0
+
+    while i < n:
+        let c = content[i]
+        if c == "\n":
+            # Extract line substring
+            let line_len = i - line_start
+            if line_len >= q_len:
+                # Check for substring match in this line
+                let k = line_start
+                let end_k = i - q_len + 1
+                while k < end_k:
+                    let found = true
+                    let j = 0
+                    while j < q_len:
+                        if content[k + j] != query[j]:
+                            found = false
+                            j = q_len
+                        else:
+                            j = j + 1
+
+                    if found:
+                        match_count = match_count + 1
+                        println("[" + filename + ":" + str(line_num) + "] Match found!")
+                        k = end_k # break line search
+                    else:
+                        k = k + 1
+
+            line_num = line_num + 1
+            line_start = i + 1
+
+        i = i + 1
+
+    ch.send(match_count)
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Fast Multi-Threaded Grep Utility")
+    println("=================================================================")
+
+    # 1. Create sample workspace files for searching
+    let file1 = "file1.txt"
+    let file2 = "file2.txt"
+    let file3 = "file3.txt"
+
+    fs.write_file(file1, "Cobalt is a fast systems language.\nParallel worker threads are fast.\nBuilt with C++ and LLVM.\n")
+    fs.write_file(file2, "High performance multi-threading in Cobalt.\nFast execution speed.\nConcurrency channels.\n")
+    fs.write_file(file3, "Cobalt compiler and CLI tools.\nFast file search engine.\nClean indentation syntax.\n")
+
+    let query = "fast"
+    println("Searching for query term: '" + query + "' across 3 files in parallel...\n")
+
+    let start_time = sys.now_millis()
+
+    # 2. Spawn multi-threaded worker threads
+    let ch1 = Channel()
+    let ch2 = Channel()
+    let ch3 = Channel()
+
+    spawn search_file_worker(file1, query, ch1)
+    spawn search_file_worker(file2, query, ch2)
+    spawn search_file_worker(file3, query, ch3)
+
+    # 3. Receive results from worker thread channels
+    let count1 = ch1.recv()
+    let count2 = ch2.recv()
+    let count3 = ch3.recv()
+
+    let end_time = sys.now_millis()
+    let total_matches = count1 + count2 + count3
+    let elapsed = end_time - start_time
+
+    println("\n=================================================================")
+    println("Search Summary:")
+    println("Total Matches Found: " + str(total_matches))
+    println("Execution Time:      " + str(elapsed) + " ms")
+    println("=================================================================")

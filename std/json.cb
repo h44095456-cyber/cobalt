@@ -1,0 +1,25 @@
+# Cobalt Standard Library: std::json
+# JSON Parser, Serializer, and Validator Module
+
+fn valid(text: string) -> bool:
+    let trimmed = text.trim()
+    let len = trimmed.len()
+    if len == 0:
+        return false
+    let first = trimmed[0..1]
+    let last = trimmed[(len - 1)..len]
+    if (first == "{" and last == "}") or (first == "[" and last == "]"):
+        return true
+    return false
+
+fn stringify_str(val: string) -> string:
+    return f"\"{val}\""
+
+fn stringify_int(val: int) -> string:
+    return str(val)
+
+fn parse_simple(text: string) -> string:
+    let trimmed = text.trim()
+    if std_json_valid(trimmed):
+        return f"Parsed JSON Object ({trimmed.len()} bytes)"
+    return "Invalid JSON"

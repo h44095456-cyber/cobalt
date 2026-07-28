@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cobalt WebAssembly (Wasm) Interactive Playground</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-container">
+                <div class="cobalt-badge">CB</div>
+                <div>
+                    <h1>Cobalt Wasm Playground</h1>
+                    <p class="subtitle">Compile & Run Cobalt WebAssembly Binaries in the Browser</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <select id="sample-select" class="btn-select">
+                    <option value="math">Sample: Math & Functions</option>
+                    <option value="string">Sample: String Literals</option>
+                    <option value="loop">Sample: While Loops</option>
+                </select>
+                <button id="run-btn" class="btn btn-primary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    Run WebAssembly
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <main class="main-content">
+            <!-- Left Pane: Code Editor -->
+            <section class="editor-pane card">
+                <div class="card-header">
+                    <span class="tab active"><span class="dot"></span> main.cb</span>
+                    <span class="target-badge">--target=wasm</span>
+                </div>
+                <textarea id="code-input" spellcheck="false">fn add(a: int, b: int) -> int:
+    return a + b
+
+fn multiply(x: int, y: int) -> int:
+    return x * y
+
+fn main():
+    let sum = add(40, 2)
+    let prod = multiply(6, 7)
+    println("Cobalt WebAssembly Target Active!")
+    println(sum)
+    println(prod)</textarea>
+            </section>
+
+            <!-- Right Pane: Terminal Output & WAT Inspection -->
+            <section class="output-pane">
+                <!-- Terminal Card -->
+                <div class="card terminal-card">
+                    <div class="card-header">
+                        <span>Terminal Output (Linear Memory Console)</span>
+                        <span id="status-indicator" class="status-pill status-ready">Ready</span>
+                    </div>
+                    <div id="terminal-out" class="terminal-body">
+                        <div class="log-line system">[System] Cobalt WebAssembly Runtime Ready.</div>
+                        <div class="log-line system">[System] Click 'Run WebAssembly' to execute compiled WASM.</div>
+                    </div>
+                </div>
+
+                <!-- Memory Inspector -->
+                <div class="card memory-card">
+                    <div class="card-header">
+                        <span>Linear Memory Heap Inspector (64KB Page 0)</span>
+                        <span class="memory-size">Memory Size: 65,536 Bytes</span>
+                    </div>
+                    <div id="memory-grid" class="memory-grid"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

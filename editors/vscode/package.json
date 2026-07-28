@@ -1,0 +1,50 @@
+{
+  "name": "cobalt-lang",
+  "displayName": "Cobalt Programming Language",
+  "description": "Rich syntax highlighting, snippet completions, and language support for Cobalt (.cb)",
+  "version": "1.9.0",
+  "publisher": "cobalt-lang",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "keywords": [
+    "cobalt",
+    "cb",
+    "systems programming",
+    "compiler",
+    "llvm"
+  ],
+  "icon": "icon.png",
+  "contributes": {
+    "languages": [
+      {
+        "id": "cobalt",
+        "aliases": [
+          "Cobalt",
+          "cobalt"
+        ],
+        "extensions": [
+          ".cb"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "cobalt",
+        "scopeName": "source.cobalt",
+        "path": "./syntaxes/cobalt.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "cobalt",
+        "path": "./snippets/cobalt.code-snippets"
+      }
+    ]
+  }
+}

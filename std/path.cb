@@ -1,0 +1,34 @@
+# Cobalt Standard Library: std::path
+# Cross-Platform Path Manipulation Utilities Module
+
+fn join(a: string, b: string) -> string:
+    if a.len() == 0:
+        return b
+    if b.len() == 0:
+        return a
+    let last_a = a[(a.len() - 1)..a.len()]
+    if last_a == "/" or last_a == "\\":
+        return a + b
+    return a + "/" + b
+
+fn ext(path: string) -> string:
+    let len = path.len()
+    var i = len - 1
+    while i >= 0:
+        let char_at = path[i..(i + 1)]
+        if char_at == ".":
+            return path[i..len]
+        if char_at == "/" or char_at == "\\":
+            break
+        i = i - 1
+    return ""
+
+fn basename(path: string) -> string:
+    let len = path.len()
+    var i = len - 1
+    while i >= 0:
+        let char_at = path[i..(i + 1)]
+        if char_at == "/" or char_at == "\\":
+            return path[(i + 1)..len]
+        i = i - 1
+    return path

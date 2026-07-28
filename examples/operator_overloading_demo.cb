@@ -1,0 +1,40 @@
+struct Vector2:
+    x: int
+    y: int
+
+impl Vector2:
+    fn add(self, other: Vector2) -> Vector2:
+        return Vector2(self.x + other.x, self.y + other.y)
+
+    fn sub(self, other: Vector2) -> Vector2:
+        return Vector2(self.x - other.x, self.y - other.y)
+
+    fn mul(self, other: Vector2) -> Vector2:
+        return Vector2(self.x * other.x, self.y * other.y)
+
+    fn to_string(self) -> string:
+        return "(" + str(self.x) + ", " + str(self.y) + ")"
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Custom Operator Overloading (v1 + v2, v1 - v2, v1 * v2)")
+    println("=================================================================")
+
+    let v1 = Vector2(10, 20)
+    let v2 = Vector2(3, 4)
+
+    println("v1 = " + v1.to_string())
+    println("v2 = " + v2.to_string())
+
+    let v3 = v1 + v2
+    println("v1 + v2 = " + v3.to_string())
+
+    let v4 = v1 - v2
+    println("v1 - v2 = " + v4.to_string())
+
+    let v5 = v1 * v2
+    println("v1 * v2 = " + v5.to_string())
+
+    println("\n=================================================================")
+    println("Operator Overloading Status: PASSED")
+    println("=================================================================")

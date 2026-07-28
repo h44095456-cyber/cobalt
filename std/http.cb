@@ -1,0 +1,25 @@
+# Cobalt Standard Library: std::http
+# Multi-Threaded HTTP Server and Client Module
+
+struct Request:
+    method: string
+    path: string
+    body: string
+
+struct Response:
+    status_code: int
+    status_text: string
+    body: string
+
+fn make_response(code: int, text: string, body: string) -> std_http_Response:
+    return std_http_Response(code, text, body)
+
+fn parse_request_line(line: string) -> std_http_Request:
+    let parts = line.split(" ")
+    var method = "GET"
+    var path = "/"
+    if parts.len() >= 1:
+        method = parts[0]
+    if parts.len() >= 2:
+        path = parts[1]
+    return std_http_Request(method, path, "")

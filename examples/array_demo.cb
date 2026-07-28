@@ -1,0 +1,14 @@
+fn main():
+    println("Testing Dynamic Arrays in Cobalt:")
+    let numbers = [10, 20, 30]
+
+    numbers.append(40)
+    numbers.append(50)
+
+    println("Array length: " + str(len(numbers)))
+    println("First element numbers[0]: " + str(numbers[0]))
+    println("Third element numbers[2]: " + str(numbers[2]))
+
+    println("Iterating over array with for-in loop:")
+    for num in numbers:
+        println("Element: " + str(num))

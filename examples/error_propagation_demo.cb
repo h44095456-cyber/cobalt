@@ -1,0 +1,26 @@
+fn parse_number(s: string) -> Result:
+    if len(s) == 0:
+        return Err("empty string")
+    if s == "10":
+        return Ok(10)
+    if s == "20":
+        return Ok(20)
+    return Err("invalid number format: " + s)
+
+fn calculate_sum(str_a: string, str_b: string) -> Result:
+    let a = parse_number(str_a)?
+    let b = parse_number(str_b)?
+    return Ok(a + b)
+
+fn main():
+    println("Testing Error Propagation Operator (?):")
+
+    let res1 = calculate_sum("10", "20")
+    match res1:
+        Ok(val) => println("Success sum: " + str(val))
+        Err(msg) => println("Error sum: " + msg)
+
+    let res2 = calculate_sum("10", "invalid")
+    match res2:
+        Ok(val) => println("Success sum: " + str(val))
+        Err(msg) => println("Error sum: " + msg)

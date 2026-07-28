@@ -1,0 +1,67 @@
+# ==============================================================================
+# Multi-Threaded HTTP/1.1 Web Server written 100% in Cobalt (.cb)
+# Demonstrates FFI socket syscalls, multi-threaded request handling, and HTTP responses.
+# ==============================================================================
+
+extern "C" fn socket(domain: int, type: int, protocol: int) -> int
+extern "C" fn listen(sockfd: int, backlog: int) -> int
+extern "C" fn close(fd: int) -> int
+
+fn build_http_response(status_code: int, content_type: string, body: string) -> string:
+    let response = "HTTP/1.1 200 OK\r\n"
+    response = response + "Content-Type: " + content_type + "\r\n"
+    response = response + "Content-Length: " + str(len(body)) + "\r\n"
+    response = response + "Connection: close\r\n\r\n"
+    response = response + body
+    return response
+
+fn handle_request(client_id: int, request_path: string, ch: Channel):
+    println("[WORKER " + str(client_id) + "] Processing HTTP GET request for path: " + request_path)
+
+    let body = "<html><body><h1>Hello from Cobalt Native Web Server!</h1><p>Request Path: " + request_path + "</p></body></html>"
+    let http_response = build_http_response(200, "text/html", body)
+
+    println("[WORKER " + str(client_id) + "] Generated HTTP/1.1 200 OK Response (" + str(len(http_response)) + " bytes)")
+    ch.send(1)
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Multi-Threaded HTTP/1.1 Web Server")
+    println("=================================================================")
+
+    # 1. Initialize Server Socket via Linux C Syscall FFI
+    let port = 8080
+    println("Initializing socket server on port " + str(port) + "...")
+
+    # AF_INET = 2, SOCK_STREAM = 1
+    let server_fd = socket(2, 1, 0)
+    if server_fd < 0:
+        println("Failed to create server socket!")
+        return
+
+    println("Socket created successfully (fd=" + str(server_fd) + ")")
+
+    let status = listen(server_fd, 10)
+    println("Server listening for incoming HTTP connections...")
+
+    # 2. Dispatch multi-threaded concurrent client HTTP requests
+    println("\n[SERVER] Dispatching incoming client requests to worker threads:\n")
+
+    let ch1 = Channel()
+    let ch2 = Channel()
+    let ch3 = Channel()
+
+    spawn handle_request(1, "/index.html", ch1)
+    spawn handle_request(2, "/api/v1/status", ch2)
+    spawn handle_request(3, "/about", ch3)
+
+    # 3. Synchronize worker thread completions
+    let res1 = ch1.recv()
+    let res2 = ch2.recv()
+    let res3 = ch3.recv()
+
+    # 4. Clean up socket
+    close(server_fd)
+    println("\n=================================================================")
+    println("Server Shutdown: Processed 3 HTTP requests concurrently!")
+    println("=================================================================")

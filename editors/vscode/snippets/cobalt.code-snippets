@@ -1,0 +1,52 @@
+{
+  "Function Declaration": {
+    "prefix": "fn",
+    "body": [
+      "fn ${1:name}(${2:params}) -> ${3:int}:",
+      "    ${0:return 0}"
+    ],
+    "description": "Declare a new function"
+  },
+  "RPC Function Declaration": {
+    "prefix": "rpc",
+    "body": [
+      "rpc fn ${1:name}(${2:params}) -> ${3:string}:",
+      "    ${0:return \"ok\"}"
+    ],
+    "description": "Declare a zero-copy RPC function"
+  },
+  "Struct Declaration": {
+    "prefix": "struct",
+    "body": [
+      "struct ${1:Name}:",
+      "    ${2:field}: ${3:int}"
+    ],
+    "description": "Declare a struct"
+  },
+  "Impl Block": {
+    "prefix": "impl",
+    "body": [
+      "impl ${1:Trait} for ${2:Type}:",
+      "    fn ${3:method}(self) -> ${4:string}:",
+      "        ${0:return \"\"}"
+    ],
+    "description": "Implement a trait or struct method"
+  },
+  "Match Guard": {
+    "prefix": "match",
+    "body": [
+      "match ${1:expr}:",
+      "    Some(${2:val}) if ${2:val} > 0 => ${3:println(\"positive\")}",
+      "    _ => ${0:println(\"other\")}"
+    ],
+    "description": "Pattern match with guard clause"
+  },
+  "Main Function": {
+    "prefix": "main",
+    "body": [
+      "fn main():",
+      "    println(\"${1:Hello, Cobalt!}\")"
+    ],
+    "description": "Main entry point function"
+  }
+}

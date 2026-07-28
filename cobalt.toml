@@ -1,0 +1,9 @@
+[package]
+name = "cobalt_app"
+version = "0.1.0"
+authors = ["Developer"]
+edition = "2026"
+
+[dependencies]
+json = "2.0.1"
+http = "1.2.0"

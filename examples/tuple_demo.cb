@@ -1,0 +1,16 @@
+fn get_user_info() -> (string, int):
+    return ("Alice", 30)
+
+fn main():
+    println("Testing Tuples & Destructuring in Cobalt:")
+
+    let pair = (100, 200)
+    println("pair.0: " + str(pair.0))
+    println("pair.1: " + str(pair.1))
+
+    let (name, age) = get_user_info()
+    println("Name: " + name)
+    println("Age:  " + str(age))
+
+    let (x, y, z) = (10, 20, 30)
+    println("x: " + str(x) + ", y: " + str(y) + ", z: " + str(z))

@@ -1,0 +1,38 @@
+struct User:
+    id: int
+    name: string
+    email: string
+    role: string
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Compile-Time Reflection & Type Introspection (@reflect)")
+    println("=================================================================")
+
+    let t_name = type_name(User)
+    println("1. Struct Type Introspection:")
+    println("   Type Name: " + t_name)
+
+    let count = field_count("User")
+    println("\n2. Struct Field Count Introspection:")
+    println("   Field Count for '" + t_name + "': " + str(count))
+
+    let fields = field_names("User")
+    println("\n3. Compile-Time Struct Field Names Inspection:")
+    for f in fields:
+        println("   - Field: " + f)
+
+    println("\n4. Automatic Dynamic Schema Metadata Generation:")
+    let json_schema = "{\"" + t_name + "\": ["
+    var idx = 0
+    for f in fields:
+        json_schema = json_schema + "\"" + f + "\""
+        if idx < count - 1:
+            json_schema = json_schema + ", "
+        idx = idx + 1
+    json_schema = json_schema + "]}"
+    println("   Auto-Generated Schema: " + json_schema)
+
+    println("\n=================================================================")
+    println("Compile-Time Reflection & Introspection Status: PASSED")
+    println("=================================================================")

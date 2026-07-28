@@ -1,0 +1,28 @@
+async fn fetch_user_data(user_id: int) -> string:
+    println("[ASYNC WORKER] Fetching user profile for ID: " + str(user_id))
+    return "User Profile (ID=" + str(user_id) + ", Name=CobaltDeveloper)"
+
+async fn fetch_order_count(user_id: int) -> int:
+    println("[ASYNC WORKER] Querying database order count for ID: " + str(user_id))
+    return 15
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Async / Await Coroutines & Concurrency")
+    println("=================================================================")
+
+    println("Dispatching async coroutines...")
+
+    let user_future = fetch_user_data(101)
+    let order_future = fetch_order_count(101)
+
+    println("Awaiting async coroutine results...")
+
+    let user_data = await user_future
+    let order_count = await order_future
+
+    println("\n=================================================================")
+    println("Async Execution Results:")
+    println("  " + user_data)
+    println("  Total Orders: " + str(order_count))
+    println("=================================================================")
