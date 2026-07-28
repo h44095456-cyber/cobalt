@@ -1269,4 +1269,8 @@ func runFormalVerification(filePath string) {
 	}
 
 	fmt.Print(report.FormatReport())
+
+	smtSolver := resolver.NewSMTSolver()
+	theorems, _ := smtSolver.ProveProgramContracts(prog)
+	fmt.Print(resolver.FormatSMTReport(theorems))
 }

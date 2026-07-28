@@ -1,0 +1,17 @@
+# Cobalt Formal Verification SMT Contract Demo
+# Demonstrates @requires and @ensures First-Order Logic Proofs via SMT-LIB2
+
+@requires(x > 0)
+@ensures(result > x)
+fn increment_positive(x: int) -> int:
+    return x + 10
+
+@requires(val >= 0)
+@ensures(result >= 0)
+fn absolute_scale(val: int) -> int:
+    return val * 2
+
+fn main():
+    let a = increment_positive(5)
+    let b = absolute_scale(10)
+    println(f"Incremented: {a}, Scaled: {b}")
