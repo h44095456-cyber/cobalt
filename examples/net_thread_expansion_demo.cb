@@ -1,0 +1,28 @@
+# Cobalt Standard Library Networking & Threading Expansion Demo (std::net & std::thread)
+
+import std/net
+import std/thread
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Standard Library Networking & Threading (std::net & std::thread) Demo")
+    println("=================================================================")
+
+    # 1. TCP Socket Networking (std::net)
+    let sock = std_net_create_tcp_socket("127.0.0.1", 8080)
+    let sent = std_net_socket_send(sock, "GET /api/v1/health HTTP/1.1\r\n\r\n")
+    let payload = std_net_socket_recv(sock, 1024)
+    sock = std_net_socket_close(sock)
+
+    println(f"[std::net] Sent {sent} bytes over TCP socket")
+    println(f"[std::net] Response Payload: {payload}")
+    println(f"[std::net] Socket Connected Status: {sock.is_connected}")
+
+    # 2. OS Multi-Threading Engine (std::thread)
+    let worker = std_thread_spawn_thread("background-worker-1")
+    let tid = std_thread_current_thread_id()
+    worker = std_thread_join_thread(worker)
+
+    println(f"[std::thread] Current Thread ID: {tid}")
+    println(f"[std::thread] Worker Running Status: {worker.is_running}")
+    println("=================================================================")
