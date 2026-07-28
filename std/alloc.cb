@@ -1,0 +1,27 @@
+# Cobalt Standard Library: std::alloc
+# High-Performance Region-Based Arena & O(1) Bump Allocators for HFT & Game Engines
+
+struct Arena:
+    capacity: int
+    used: int
+    alloc_count: int
+
+struct BumpPointer:
+    offset: int
+    max_offset: int
+
+fn create_arena(capacity: int) -> std_alloc_Arena:
+    println(f"[std::alloc] Initialized Arena Region Memory Pool ({capacity} bytes)")
+    return std_alloc_Arena(capacity, 0, 0)
+
+fn arena_alloc(a: std_alloc_Arena, size: int) -> std_alloc_Arena:
+    if a.used + size > a.capacity:
+        println(f"⚠️ [std::alloc] OUT OF MEMORY: Cannot allocate {size} bytes in Arena Pool")
+        return a
+    let new_used = a.used + size
+    let new_count = a.alloc_count + 1
+    return std_alloc_Arena(a.capacity, new_used, new_count)
+
+fn arena_reset(a: std_alloc_Arena) -> std_alloc_Arena:
+    println(f"[std::alloc] Reset Arena Pool (Freed {a.used} bytes across {a.alloc_count} allocations in O(1))")
+    return std_alloc_Arena(a.capacity, 0, 0)

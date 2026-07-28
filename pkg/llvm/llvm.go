@@ -8,6 +8,7 @@ import (
 )
 
 type LLVMGenerator struct {
+	TargetTriple    string
 	buf             bytes.Buffer
 	regCounter      int
 	labelCounter    int
@@ -141,10 +142,11 @@ func (g *LLVMGenerator) Generate(program *ast.Program) (string, error) {
 		}
 	}
 
-	// Header
-	g.buf.WriteString("; ModuleID = 'cobalt_module'\n")
-	g.buf.WriteString("source_filename = \"cobalt_module\"\n")
-	g.buf.WriteString("target triple = \"x86_64-pc-linux-gnu\"\n\n")
+	targetTriple := "x86_64-pc-linux-gnu"
+	if g.TargetTriple != "" {
+		targetTriple = g.TargetTriple
+	}
+	g.buf.WriteString(fmt.Sprintf("target triple = \"%s\"\n\n", targetTriple))
 
 	// Array struct type: { i64* data, i64 len, i64 cap }
 	g.buf.WriteString("%struct.Array = type { i64*, i64, i64 }\n")

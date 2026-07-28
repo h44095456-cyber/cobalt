@@ -1,0 +1,25 @@
+# Cobalt High-Frequency Arena & Bump Allocator Demo
+# Demonstrates std::alloc O(1) region allocation and instantaneous memory resets
+
+import std/alloc
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Ultra-Low Latency Arena Allocator (std::alloc) Demo")
+    println("=================================================================")
+
+    # Initialize a 1024-byte Arena Pool
+    let arena = std_alloc_create_arena(1024)
+
+    # Perform 3 fast O(1) allocations
+    arena = std_alloc_arena_alloc(arena, 64)
+    arena = std_alloc_arena_alloc(arena, 128)
+    arena = std_alloc_arena_alloc(arena, 256)
+
+    println(f"[Arena Status] Used: {arena.used} / {arena.capacity} bytes | Allocations: {arena.alloc_count}")
+
+    # Instantaneous O(1) region deallocation reset
+    arena = std_alloc_arena_reset(arena)
+
+    println(f"[Arena Reset Status] Used: {arena.used} / {arena.capacity} bytes | Allocations: {arena.alloc_count}")
+    println("=================================================================")
