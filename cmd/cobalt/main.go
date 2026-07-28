@@ -240,6 +240,17 @@ func main() {
 		}
 		runCFGAnalysis(filePath)
 
+	case "infer":
+		filePath := ""
+		if len(os.Args) >= 3 {
+			filePath = os.Args[2]
+		}
+		if filePath == "" {
+			fmt.Println("Error: missing input file for 'infer'")
+			os.Exit(1)
+		}
+		runTypeInference(filePath)
+
 	case "self-host":
 		runFile("examples/self_hosting_compiler.cb", "cpp")
 
@@ -1302,4 +1313,17 @@ func runCFGAnalysis(filePath string) {
 			fmt.Print(graph.FormatCFG())
 		}
 	}
+}
+
+func runTypeInference(filePath string) {
+	modResolver := resolver.New()
+	prog, err := modResolver.ResolveProgram(filePath)
+	if err != nil {
+		fmt.Printf("Error resolving module %s: %v\n", filePath, err)
+		os.Exit(1)
+	}
+
+	inferencer := resolver.NewHMInferencer()
+	inferredMap := inferencer.InferProgram(prog)
+	fmt.Print(resolver.FormatHMReport(inferredMap))
 }
