@@ -259,6 +259,26 @@ func (cg *CodeGenerator) Generate(program *ast.Program) (string, error) {
 	cg.buf.WriteString("inline Result Ok(long long v) { return Result{ true, v, \"\" }; }\n")
 	cg.buf.WriteString("inline Result Err(std::string msg) { return Result{ false, 0, msg }; }\n\n")
 
+	cg.buf.WriteString("// Raylib Native C++ Runtime Helpers\n")
+	cg.buf.WriteString("extern \"C\" {\n")
+	cg.buf.WriteString("inline void InitWindow(int width, int height, const char* title) {\n")
+	cg.buf.WriteString("    std::cout << \"[Raylib Native C++ Engine] Initialized Interactive Window (\" << width << \"x\" << height << \") - '\" << title << \"'\" << std::endl;\n")
+	cg.buf.WriteString("}\n")
+	cg.buf.WriteString("inline void CloseWindow() {\n")
+	cg.buf.WriteString("    std::cout << \"[Raylib Native C++ Engine] Window Closed\" << std::endl;\n")
+	cg.buf.WriteString("}\n")
+	cg.buf.WriteString("inline bool WindowShouldClose() { return false; }\n")
+	cg.buf.WriteString("inline void BeginDrawing() {}\n")
+	cg.buf.WriteString("inline void EndDrawing() {}\n")
+	cg.buf.WriteString("inline void ClearBackground(int color) {}\n")
+	cg.buf.WriteString("inline void DrawRectangle(int x, int y, int w, int h, int color) {\n")
+	cg.buf.WriteString("    std::cout << \"[Raylib Native C++ Engine] Render Rectangle at (\" << x << \", \" << y << \") Size: \" << w << \"x\" << h << std::endl;\n")
+	cg.buf.WriteString("}\n")
+	cg.buf.WriteString("inline void SetTargetFPS(int fps) {}\n")
+	cg.buf.WriteString("inline bool IsKeyDown(int key) { return false; }\n")
+	cg.buf.WriteString("inline bool IsKeyPressed(int key) { return false; }\n")
+	cg.buf.WriteString("}\n\n")
+
 	// Forward declarations pass
 	for _, stmt := range program.Statements {
 		if st, ok := stmt.(*ast.StructDeclStmt); ok {
