@@ -1,0 +1,14 @@
+# Cobalt Native Web Framework Demo
+# Demonstrates std::web HTTP routing, JSON response, and health endpoints
+
+import std/web
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Native Web Framework (std::web) Service Demo")
+    println("=================================================================")
+
+    let app = std_web_create_app("Cobalt Microservice API", 8080)
+    std_web_listen(app)
+
+    println("=================================================================")
