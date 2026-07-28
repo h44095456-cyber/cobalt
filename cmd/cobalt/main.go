@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"cobalt/pkg/ast"
+	"cobalt/pkg/cfg"
 	"cobalt/pkg/codegen"
 	"cobalt/pkg/debugger"
 	"cobalt/pkg/docgen"
@@ -227,6 +228,17 @@ func main() {
 			os.Exit(1)
 		}
 		runFormalVerification(filePath)
+
+	case "cfg":
+		filePath := ""
+		if len(os.Args) >= 3 {
+			filePath = os.Args[2]
+		}
+		if filePath == "" {
+			fmt.Println("Error: missing input file for 'cfg'")
+			os.Exit(1)
+		}
+		runCFGAnalysis(filePath)
 
 	case "self-host":
 		runFile("examples/self_hosting_compiler.cb", "cpp")
@@ -1273,4 +1285,21 @@ func runFormalVerification(filePath string) {
 	smtSolver := resolver.NewSMTSolver()
 	theorems, _ := smtSolver.ProveProgramContracts(prog)
 	fmt.Print(resolver.FormatSMTReport(theorems))
+}
+
+func runCFGAnalysis(filePath string) {
+	modResolver := resolver.New()
+	prog, err := modResolver.ResolveProgram(filePath)
+	if err != nil {
+		fmt.Printf("Error resolving module %s: %v\n", filePath, err)
+		os.Exit(1)
+	}
+
+	builder := cfg.NewSSAOptimizer()
+	for _, stmt := range prog.Statements {
+		if fn, ok := stmt.(*ast.FnDeclStmt); ok {
+			graph := builder.BuildCFG(fn)
+			fmt.Print(graph.FormatCFG())
+		}
+	}
 }
