@@ -1,61 +1,91 @@
-# 🐍 Cobalt 2D Interactive Snake Game powered by std::raylib
-# Written in 100% Native Cobalt Source Code
+# 🐍 Cobalt 2D Interactive Raylib Snake Game Engine (examples/snake_raylib_game.cb)
+# Written 100% in Native Cobalt Source Code with Full Keyboard Steering & Game Loop
 
 import std/raylib
 
-struct Segment:
+struct Point:
     x: int
     y: int
 
-struct SnakeGame:
-    score: int
-    grid_size: int
-
-fn run_snake_game_loop():
+fn run_snake_game():
     println("=================================================================")
-    println("🐍 Cobalt Native Raylib 2D Snake Game Engine (examples/snake_raylib_game.cb)")
+    println("🐍 Cobalt Native Raylib Interactive 2D Snake Game Engine")
     println("=================================================================")
 
-    # 1. Initialize Raylib GPU Canvas Window
+    # 1. Initialize Window & Target FPS
     std_raylib_init_window(800, 600, "Cobalt Native Raylib 2D Snake Game")
     std_raylib_set_fps(15)
 
-    # 2. Setup Initial Game Coordinates
-    let head_x = 400
-    let head_y = 300
-    let food_x = 520
-    let food_y = 300
-    let frame_count = 0
+    # 2. State Variables
+    let head_x = 20
+    let head_y = 15
+    let dir_x = 1
+    let dir_y = 0
+    let food_x = 25
+    let food_y = 15
+    let score = 0
+    let is_game_over = false
+    let tick_count = 0
 
-    # 3. Interactive Render Loop
-    while frame_count < 3:
+    # 3. Game Loop (Runs for 100 Ticks / Frames)
+    while tick_count < 100:
+        # Check Steering Keys (W, A, S, D & Arrows)
+        let key_up = std_raylib_is_key_down(87) or std_raylib_is_key_down(265)
+        let key_down = std_raylib_is_key_down(83) or std_raylib_is_key_down(264)
+        let key_left = std_raylib_is_key_down(65) or std_raylib_is_key_down(263)
+        let key_right = std_raylib_is_key_down(68) or std_raylib_is_key_down(262)
+
+        if key_up and dir_y != 1:
+            dir_x = 0
+            dir_y = 0 - 1
+        elif key_down and dir_y != 0 - 1:
+            dir_x = 0
+            dir_y = 1
+        elif key_left and dir_x != 1:
+            dir_x = 0 - 1
+            dir_y = 0
+        elif key_right and dir_x != 0 - 1:
+            dir_x = 1
+            dir_y = 0
+
+        if not is_game_over:
+            # Move Snake Head
+            head_x = head_x + dir_x
+            head_y = head_y + dir_y
+
+            # Check Wall Collisions (40x30 tiles)
+            if head_x < 0 or head_x >= 40 or head_y < 0 or head_y >= 30:
+                is_game_over = true
+
+            # Check Food Collision
+            if head_x == food_x and head_y == food_y:
+                score = score + 10
+                food_x = (head_x + 7) % 38 + 1
+                food_y = (head_y + 11) % 28 + 1
+
+        # Frame Render Pass
         std_raylib_begin_drawing()
         
-        # Background (Dark Navy)
+        # Background
         std_raylib_draw_rect(0, 0, 800, 600, 20, 24, 33)
-        
-        # Food (Ruby Red)
-        std_raylib_draw_rect(food_x, food_y, 20, 20, 231, 76, 60)
-        
-        # Snake Head & Tail (Emerald Green)
-        std_raylib_draw_rect(head_x, head_y, 20, 20, 46, 204, 113)
-        std_raylib_draw_rect(head_x - 20, head_y, 20, 20, 46, 204, 113)
-        std_raylib_draw_rect(head_x - 40, head_y, 20, 20, 46, 204, 113)
-        
+
+        if is_game_over:
+            println(f"[Raylib Engine Frame {tick_count}] GAME OVER | Final Score: {score}")
+        else:
+            # Draw Food (Red)
+            std_raylib_draw_rect(food_x * 20, food_y * 20, 18, 18, 231, 76, 60)
+            
+            # Draw Snake Head (Emerald Green)
+            std_raylib_draw_rect(head_x * 20, head_y * 20, 18, 18, 46, 204, 113)
+
         std_raylib_end_drawing()
+        tick_count = tick_count + 1
 
-        let key_w = std_raylib_is_key_down(87) # KEY_W
-        let key_s = std_raylib_is_key_down(83) # KEY_S
-        let key_a = std_raylib_is_key_down(65) # KEY_A
-        let key_d = std_raylib_is_key_down(68) # KEY_D
-
-        frame_count = frame_count + 1
-
-    # 4. Teardown Raylib Window
+    # 4. Teardown
     std_raylib_close_window()
     println("=================================================================")
-    println("✅ Cobalt Raylib Snake Game Loop Completed Successfully")
+    println(f"✅ Cobalt Raylib Game Engine Loop Complete | Final Score: {score}")
     println("=================================================================")
 
 fn main():
-    run_snake_game_loop()
+    run_snake_game()
