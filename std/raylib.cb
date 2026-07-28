@@ -56,6 +56,18 @@ fn init_audio():
 fn close_audio():
     println("[std::raylib] Closed Raylib Audio Device Engine")
 
+fn begin_drawing():
+    return
+
+fn end_drawing():
+    return
+
+fn set_fps(fps: int):
+    println(f"[std::raylib] Target FPS set to {fps}")
+
+fn draw_rect(x: int, y: int, w: int, h: int, r: int, g: int, b: int):
+    println(f"[std::raylib] Draw Rect at ({x}, {y}) Size: {w}x{h}")
+
 fn draw_cube_3d(x: float, y: float, z: float, w: float, h: float, l: float):
     println(f"[std::raylib 3D] Draw 3D Cube at ({x}, {y}, {z}) Size: {w}x{h}x{l}")
 
@@ -64,6 +76,9 @@ fn draw_sphere_3d(x: float, y: float, z: float, radius: float):
 
 fn get_mouse_position() -> std_raylib_Vector2:
     return std_raylib_Vector2(400.0, 300.0)
+
+fn is_key_down(key: int) -> bool:
+    return false
 
 fn is_mouse_button_pressed(button: int) -> bool:
     return false

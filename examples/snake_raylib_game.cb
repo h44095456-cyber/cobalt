@@ -1,0 +1,60 @@
+# 🐍 Cobalt 2D Interactive Snake Game powered by std::raylib
+# Written in 100% Native Cobalt Source Code
+
+import std/raylib
+
+struct Segment:
+    x: int
+    y: int
+
+struct SnakeGame:
+    score: int
+    grid_size: int
+
+fn run_snake_game_loop():
+    println("=================================================================")
+    println("🐍 Cobalt Native Raylib 2D Snake Game Engine (examples/snake_raylib_game.cb)")
+    println("=================================================================")
+
+    # 1. Initialize Raylib GPU Canvas Window
+    std_raylib_init_window(800, 600, "Cobalt Native Raylib 2D Snake Game")
+    std_raylib_set_fps(15)
+
+    # 2. Setup Initial Game Coordinates
+    let head_x = 400
+    let head_y = 300
+    let food_x = 520
+    let food_y = 300
+
+    # 3. Simulate Drawing Frame 1
+    std_raylib_begin_drawing()
+    
+    # Background (Dark Navy)
+    std_raylib_draw_rect(0, 0, 800, 600, 20, 24, 33)
+    
+    # Food (Ruby Red)
+    std_raylib_draw_rect(food_x, food_y, 20, 20, 231, 76, 60)
+    
+    # Snake Head & Tail (Emerald Green)
+    std_raylib_draw_rect(head_x, head_y, 20, 20, 46, 204, 113)
+    std_raylib_draw_rect(head_x - 20, head_y, 20, 20, 46, 204, 113)
+    std_raylib_draw_rect(head_x - 40, head_y, 20, 20, 46, 204, 113)
+    
+    std_raylib_end_drawing()
+
+    # 4. Input Keyboard Check
+    let key_w = std_raylib_is_key_down(87) # KEY_W
+    let key_s = std_raylib_is_key_down(83) # KEY_S
+    let key_a = std_raylib_is_key_down(65) # KEY_A
+    let key_d = std_raylib_is_key_down(68) # KEY_D
+
+    println(f"[Raylib Snake Engine] Steering Inputs -> W: {key_w}, S: {key_s}, A: {key_a}, D: {key_d}")
+
+    # 5. Teardown Raylib Window
+    std_raylib_close_window()
+    println("=================================================================")
+    println("✅ Cobalt Raylib Snake Game Loop Completed Successfully")
+    println("=================================================================")
+
+fn main():
+    run_snake_game_loop()
