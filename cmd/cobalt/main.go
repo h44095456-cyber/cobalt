@@ -217,6 +217,17 @@ func main() {
 		}
 		generateCHeaderFile(filePath)
 
+	case "verify":
+		filePath := ""
+		if len(os.Args) >= 3 {
+			filePath = os.Args[2]
+		}
+		if filePath == "" {
+			fmt.Println("Error: missing input file for 'verify'")
+			os.Exit(1)
+		}
+		runFormalVerification(filePath)
+
 	case "self-host":
 		runFile("examples/self_hosting_compiler.cb", "cpp")
 
@@ -1240,4 +1251,22 @@ func generateCHeaderFile(filePath string) {
 
 	os.WriteFile(headerName, []byte(buf.String()), 0644)
 	fmt.Printf("Successfully generated C/C++ Header file at: %s\n", headerName)
+}
+
+func runFormalVerification(filePath string) {
+	modResolver := resolver.New()
+	prog, err := modResolver.ResolveProgram(filePath)
+	if err != nil {
+		fmt.Printf("Error resolving module %s: %v\n", filePath, err)
+		os.Exit(1)
+	}
+
+	verifier := resolver.NewFormalVerifier()
+	report, err := verifier.Verify(prog)
+	if err != nil {
+		fmt.Printf("Verification Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Print(report.FormatReport())
 }
