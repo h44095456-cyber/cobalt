@@ -1,0 +1,28 @@
+# Cobalt Security & Cryptographic Memory Sanitization Demo
+
+import std/security
+
+fn main():
+    println("=================================================================")
+    println("Cobalt Security & Cryptographic Protection (std::security) Demo")
+    println("=================================================================")
+
+    # 1. Constant-Time Hash & Password Comparison (Timing-Attack Protection)
+    let hash1 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    let hash2 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+
+    let matches = std_security_constant_time_compare(hash1, hash2)
+    println(f"[std::security] Constant-Time Hash Comparison Match: {matches}")
+
+    # 2. Sensitive Memory Zero-Wiping
+    let secret_buf = std_security_MemoryBuffer(512, false)
+    secret_buf = std_security_secure_wipe(secret_buf)
+
+    println(f"[std::security] Secret Buffer Memory Wiped Status: {secret_buf.wiped}")
+
+    # 3. Input Sanitization
+    let raw_input = "<script>alert('xss')</script>"
+    let clean_input = std_security_sanitize_input(raw_input)
+
+    println(f"[std::security] Sanitized Input Result: {clean_input}")
+    println("=================================================================")
