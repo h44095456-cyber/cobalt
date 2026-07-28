@@ -1,0 +1,61 @@
+# Cobalt 100% Native 2D/3D Game Engine Sample
+# Demonstrates Entity-Component-System (ECS) Architecture, Physics Simulation, and Collision Detection
+
+import std/gui
+
+struct Entity:
+    id: int
+    name: string
+
+struct Transform:
+    x: int
+    y: int
+    vx: int
+    vy: int
+
+fn update_transform(t: Transform) -> Transform:
+    let new_x = t.x + t.vx
+    let new_y = t.y + t.vy
+    return Transform(new_x, new_y, t.vx, t.vy)
+
+fn check_collision(t1: Transform, t2: Transform) -> bool:
+    let dx = t1.x - t2.x
+    let dy = t1.y - t2.y
+    if dx < 0:
+        dx = 0 - dx
+    if dy < 0:
+        dy = 0 - dy
+    return dx < 20 and dy < 20
+
+fn main():
+    println("=================================================================")
+    println("Cobalt 2D Game Engine & Physics ECS Simulation")
+    println("=================================================================")
+
+    # Initialize Player & Enemy entities in ECS world
+    let player = Entity(1, "Hero Player")
+    let enemy = Entity(2, "Goblin Enemy")
+
+    let player_transform = Transform(10, 10, 5, 2)
+    let enemy_transform = Transform(25, 20, 0 - 2, 0 - 1)
+
+    println(f"[ECS Engine] Initialized {player.name} at ({player_transform.x}, {player_transform.y})")
+    println(f"[ECS Engine] Initialized {enemy.name} at ({enemy_transform.x}, {enemy_transform.y})")
+
+    # Run 5 Physics Simulation Ticks
+    let tick = 1
+    while tick <= 5:
+        player_transform = update_transform(player_transform)
+        enemy_transform = update_transform(enemy_transform)
+
+        println(f"[Tick {tick}] Player: ({player_transform.x}, {player_transform.y}) | Enemy: ({enemy_transform.x}, {enemy_transform.y})")
+
+        let is_colliding = check_collision(player_transform, enemy_transform)
+        if is_colliding:
+            println(f"⚡ [ECS Physics System] COLLISION DETECTED between {player.name} and {enemy.name}!")
+
+        tick = tick + 1
+
+    println("=================================================================")
+    println("Cobalt Game Engine Simulation Status: COMPLETED CLEANLY")
+    println("=================================================================")

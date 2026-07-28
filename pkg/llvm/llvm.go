@@ -1472,6 +1472,13 @@ func (g *LLVMGenerator) generateBodyStatement(buf *bytes.Buffer, stmt ast.Statem
 					return err
 				}
 				ptrReg := g.varAllocaMap[id.Value]
+				if strings.HasSuffix(valType, "*") && strings.HasPrefix(valType, "%struct.") {
+					loadedVal := g.freshReg()
+					pureType := strings.TrimSuffix(valType, "*")
+					buf.WriteString(fmt.Sprintf("    %s = load %s, %s* %s\n", loadedVal, pureType, pureType, valReg))
+					valReg = loadedVal
+					valType = pureType
+				}
 				buf.WriteString(fmt.Sprintf("    store %s %s, %s* %s\n", valType, valReg, valType, ptrReg))
 				return nil
 			} else if mem, ok := infix.Left.(*ast.MemberExpr); ok {
