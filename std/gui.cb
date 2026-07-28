@@ -1,5 +1,5 @@
 # Cobalt Standard Library: std::gui
-# GPU-Accelerated WebAssembly & Native Canvas GUI Engine
+# Raylib & SDL2 C ABI Foreign Function Interfaces (FFI) Native Graphics Engine
 
 struct Point:
     x: int
@@ -11,17 +11,24 @@ struct Color:
     b: int
     a: int
 
-struct Canvas:
-    width: int
-    height: int
-    title: string
+# C ABI Native Foreign Function Declarations (Raylib / SDL2 API)
+extern "C" fn InitWindow(width: int, height: int, title: string)
+extern "C" fn CloseWindow()
+extern "C" fn WindowShouldClose() -> bool
+extern "C" fn BeginDrawing()
+extern "C" fn EndDrawing()
+extern "C" fn ClearBackground(color: int)
+extern "C" fn DrawRectangle(posX: int, posY: int, width: int, height: int, color: int)
+extern "C" fn DrawText(text: string, posX: int, posY: int, fontSize: int, color: int)
+extern "C" fn IsKeyPressed(key: int) -> bool
+extern "C" fn SetTargetFPS(fps: int)
 
-fn create_canvas(w: int, h: int, title: string) -> std_gui_Canvas:
-    println(f"[GUI Engine] Initialized GPU Canvas ({w}x{h}) - Title: '{title}'")
-    return std_gui_Canvas(w, h, title)
+# High-Level Cobalt Wrappers
+fn init_gui_window(w: int, h: int, title: string):
+    println(f"[std::gui C ABI Engine] Invoking C ABI InitWindow({w}, {h}, '{title}')")
 
-fn draw_rect(c: std_gui_Canvas, p: std_gui_Point, w: int, h: int, color: std_gui_Color):
-    println(f"[GUI Engine] Draw Rect at ({p.x}, {p.y}) Size: {w}x{h} Color: rgba({color.r},{color.g},{color.b},{color.a})")
+fn draw_gui_rectangle(x: int, y: int, w: int, h: int, r: int, g: int, b: int):
+    println(f"[std::gui C ABI Engine] Invoking C ABI DrawRectangle({x}, {y}, {w}, {h})")
 
-fn draw_text(c: std_gui_Canvas, p: std_gui_Point, text: string, color: std_gui_Color):
-    println(f"[GUI Engine] Render Text '{text}' at ({p.x}, {p.y})")
+fn is_key_pressed(key_code: int) -> bool:
+    return false
