@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cobalt API Reference - examples/web_framework_demo.cb</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Outfit', sans-serif; background: #090d16; color: #f8fafc; margin: 0; padding: 32px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        h1 { font-size: 36px; color: #38bdf8; margin-bottom: 24px; border-bottom: 1px solid #1e293b; padding-bottom: 12px; }
+        h2 { font-size: 24px; color: #818cf8; margin-top: 32px; margin-bottom: 16px; }
+        .doc-card { background: #0f172a; border: 1px solid #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+        .fn-sig { font-family: 'Fira Code', monospace; font-size: 16px; color: #38bdf8; }
+        .fn-desc { color: #94a3b8; font-size: 14px; margin-top: 8px; }
+        .struct-body { font-family: 'Fira Code', monospace; color: #4ade80; background: #020617; padding: 12px; border-radius: 8px; font-size: 14px; }
+        .tag { background: #0284c7; color: white; padding: 2px 8px; border-radius: 6px; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cobalt API Reference Documentation</h1>
+        <h2>Struct Declarations</h2>
+        
+				<div class="doc-card">
+					<div class="fn-sig">struct <strong>std_http_Request</strong></div>
+					<pre class="struct-body">{\n    method: string
+    path: string
+    body: string\n}</pre>
+				</div>
+				<div class="doc-card">
+					<div class="fn-sig">struct <strong>std_http_Response</strong></div>
+					<pre class="struct-body">{\n    status_code: int
+    status_text: string
+    body: string\n}</pre>
+				</div>
+				<div class="doc-card">
+					<div class="fn-sig">struct <strong>std_web_Context</strong></div>
+					<pre class="struct-body">{\n    path: string
+    method: string
+    body: string
+    status: int\n}</pre>
+				</div>
+				<div class="doc-card">
+					<div class="fn-sig">struct <strong>std_web_Route</strong></div>
+					<pre class="struct-body">{\n    method: string
+    path: string\n}</pre>
+				</div>
+				<div class="doc-card">
+					<div class="fn-sig">struct <strong>std_web_App</strong></div>
+					<pre class="struct-body">{\n    port: int
+    name: string\n}</pre>
+				</div>
+        <h2>Function Signatures</h2>
+        
+				<div class="doc-card">
+					<div class="fn-sig">fn <strong>std_http_make_response</strong>(code: int, text: string, body: string) -&gt; std_http_Response</div>
+					<div class="fn-desc">Exported Cobalt core function contract.</div>
+				</div>
+				<div class="doc-card">
+					<div class="fn-sig">fn <strong>std_http_parse_request_line</strong>(line: string) -&gt; std_http_Request</div>
+					<div class="fn-desc">Exported Cobalt core function contract.</div>
+				</div>
+				<div class="doc-card">
+					<div class="fn-sig">fn <strong>std_json_valid</strong>(text: string) -&gt; bool</div>
+					<div class="fn-desc">Exported Cobalt core function contract.</div>
+				</div>
+				<div class="doc-card">
+					<div class="fn-sig">fn <strong>std_json_stringify_str</strong>(val: string) -&gt; string</div>
+					<div class="fn-desc">Exported Cobalt core function contract.</div>
+				</div>
+				<div class="doc-card">
+					<div class="fn-sig">fn <strong>std_json_stringify_int</strong>(val: int) -&gt; string</div>
+					<div class="fn-desc">Exported Cobalt core function contract.</div>
+				</div>
+				<div class="doc-card">
+					<div class="fn-sig">fn <strong>std_json_parse_simple</strong>(text: string) -&gt; string</div>
+					<div class="fn-desc">Exported Cobalt core function contract.</div>
+				</div>
+				<div class="doc-card">
+					<div class="fn-sig">fn <strong>std_web_create_app</strong>(name: string, port: int) -&gt; std_web_App</div>
+					<div class="fn-desc">Exported Cobalt core function contract.</div>
+				</div>
+				<div class="doc-card">
+					<div class="fn-sig">fn <strong>std_web_handle_request</strong>(ctx: std_web_Context) -&gt; std_web_Context</div>
+					<div class="fn-desc">Exported Cobalt core function contract.</div>
+				</div>
+				<div class="doc-card">
+					<div class="fn-sig">fn <strong>std_web_listen</strong>(app: std_web_App) -&gt; void</div>
+					<div class="fn-desc">Exported Cobalt core function contract.</div>
+				</div>
+				<div class="doc-card">
+					<div class="fn-sig">fn <strong>main</strong>() -&gt; void</div>
+					<div class="fn-desc">Exported Cobalt core function contract.</div>
+				</div>
+    </div>
+</body>
+</html>

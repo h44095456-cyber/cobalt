@@ -161,11 +161,19 @@ func main() {
 		buildFileTarget(filePath, outFile, target)
 
 	case "doc":
-		filePath := "examples/json_parser.cb"
-		if len(os.Args) >= 3 {
-			filePath = os.Args[2]
+		if len(os.Args) >= 3 && (os.Args[2] == "--html" || os.Args[2] == "-html") {
+			filePath := "examples/web_framework_demo.cb"
+			if len(os.Args) >= 4 {
+				filePath = os.Args[3]
+			}
+			runDocGenHTML(filePath)
+		} else {
+			filePath := "examples/json_parser.cb"
+			if len(os.Args) >= 3 {
+				filePath = os.Args[2]
+			}
+			runDocGen(filePath)
 		}
-		runDocGen(filePath)
 
 	case "debug":
 		filePath := ""
@@ -1366,4 +1374,20 @@ func emitBitcodeFile(filePath string, outFile string) {
 		fmt.Printf("Bitcode Emission Error: %v\n", err)
 		os.Exit(1)
 	}
+}
+
+func runDocGenHTML(filePath string) {
+	modResolver := resolver.New()
+	prog, err := modResolver.ResolveProgram(filePath)
+	if err != nil {
+		fmt.Printf("Error resolving module %s: %v\n", filePath, err)
+		os.Exit(1)
+	}
+
+	htmlGen := docgen.NewHTMLDocGenerator()
+	htmlContent := htmlGen.GenerateHTML(prog, filePath)
+	docFile := "docs/api.html"
+	os.MkdirAll("docs", 0755)
+	os.WriteFile(docFile, []byte(htmlContent), 0644)
+	fmt.Printf("Successfully generated Cobalt API HTML Documentation at ./%s\n", docFile)
 }
